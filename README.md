@@ -1,7 +1,7 @@
 # nuxt-koa-ssr
 nuxt-koa-ssr team
 
-> nuxt后端渲染
+> nuxt后端渲染  
 
 ## Build Setup
 
