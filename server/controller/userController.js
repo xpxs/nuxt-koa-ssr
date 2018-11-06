@@ -17,6 +17,23 @@ export async function getUserInfo(ctx) {
     ctx.body = resDataTpl
   }
 }
+/**
+ * [addUserInfo 新增用户信息]
+ * @Author   tanpeng
+ * @DateTime 2018-11-06
+ * @version  [v1.0]
+ * @param    {[type]}   ctx [koa封装变量]
+ */
+export async function addOrUpdateUser(ctx, values) {
+  let data = await userModel.addOrUpdateUser(values)
+  if (data) {
+    resDataTpl.message = '新增更新成功'
+  } else {
+    resDataTpl.message = '新增更新失败'
+  }
+  resDataTpl.success = data
+  ctx.body = resDataTpl
+}
 
 export async function postUserAuth(ctx) {
   const data = ctx.request.body // post过来的数据存在request.body里

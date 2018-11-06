@@ -12,3 +12,6 @@ dist
 
 # server logs
 server/logs
+
+# build
+build

@@ -1,8 +1,5 @@
 import Koa from 'koa'
-import {
-  Nuxt,
-  Builder
-} from 'nuxt'
+import { Nuxt, Builder } from 'nuxt'
 import path from 'path'
 import fs from 'fs'
 import Log4js from 'koa-log4'
@@ -10,9 +7,7 @@ import bodyParser from 'koa-bodyparser'
 import convert from 'koa-convert'
 import cors from 'koa-cors'
 import jwt from 'koa-jwt'
-import {
-  CONFIG_API
-} from './config/CONFIG_API'
+import { CONFIG_API } from './config/CONFIG_API'
 import logConfig from './config/log4js'
 import routes from './routes'
 
@@ -23,7 +18,7 @@ async function start() {
   const port = CONFIG_API.PORT || 3000
 
   // routes
-  app.use(routes.routes(), routes.allowedMethods());
+  app.use(routes.routes(), routes.allowedMethods())
   app.use(bodyParser())
   app.use(convert(cors()))
 
@@ -46,9 +41,11 @@ async function start() {
   })
   // 生成logs目录 && 加载配置文件 end
 
-  app.use(Log4js.koaLogger(Log4js.getLogger('http'), {
-    level: 'http'
-  }))
+  app.use(
+    Log4js.koaLogger(Log4js.getLogger('http'), {
+      level: 'http'
+    })
+  )
   // Instantiate nuxt.js
   const nuxt = new Nuxt(config)
 

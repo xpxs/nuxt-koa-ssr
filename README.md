@@ -12,11 +12,14 @@ $ npm install # Or yarn install*[see note below]
 # serve with hot reload at localhost:3000
 $ npm run dev
 
-# build for production and launch server
-$ npm run build
-$ npm start
+# build for production and launch server X = alpha(测试环境), X = uat(联调环境), X = prod(生产环境)
+$ npm run X:build
+$ npm run X:start
 
-# generate static project
+#pm2运行nodejs程序
+$ npm run X:pm2
+
+# generate static project 静态打包
 $ npm run generate
 ```
 

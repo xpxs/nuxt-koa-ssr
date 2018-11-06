@@ -7,15 +7,26 @@ const User = mysql.import(userSchema) // 将Sequelize与表结构对应
 export async function getUserById(id) {
   return await User.findOne({
     where: {
-      id
+      user_id
+    }
+  })
+}
+/**
+ * [getUserByName 按用户名查找]
+ * @Author   tanpeng
+ * @DateTime 2018-11-06
+ * @version  [v1.0]
+ * @param    {[type]}   username [按照查找的用户名]
+ * @return   {[type]}            [description]
+ */
+export async function getUserByName(username) {
+  return await User.findOne({
+    where: {
+      user_name
     }
   })
 }
 
-export async function getUserByName(username) {
-  return await User.findOne({
-    where: {
-      username
-    }
-  })
+export async function addOrUpdateUser(values) {
+  return await User.upsert(values)
 }

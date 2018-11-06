@@ -1,4 +1,4 @@
-const name = 'junnerblog'
+const name = 'junnerblogdb'
 const version = 'v0.0.1'
 const api = 'api'
 const timeout = 50000
