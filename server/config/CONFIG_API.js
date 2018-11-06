@@ -1,6 +1,4 @@
-import {
-  WEBSITE
-} from './WEBSITE'
+import { WEBSITE } from './WEBSITE'
 const APP = WEBSITE.name
 const API = WEBSITE.api
 const BASE_API = WEBSITE.baseApi
@@ -10,7 +8,8 @@ const SHOW_EXAMPLES = true
 const AXIOS_DEFAULT_TIMEOUT = WEBSITE.timeout
 const HOST = process.env.HOST || '127.0.0.1'
 const PORT = process.env.PORT || '3000'
-const LB_ADDR = process.env.LB_ADDR || `http://${HOST}:${PORT}` + WEBSITE.baseApi
+const LB_ADDR =
+  process.env.LB_ADDR || `http://${HOST}:${PORT}` + WEBSITE.baseApi
 
 const ENDPOINT_BACKEND_AUTH = '/oauth/token'
 const ENDPOINT_BACKEND_VALIDATE = '/oauth/validate'

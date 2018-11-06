@@ -1,12 +1,10 @@
-'use strict';
+'use strict'
 import * as userModel from '../model/userModel' // 引入userModel
-import {
-  resDataTpl
-} from './resDataTpl' // 引入返回数据模板
+import { resDataTpl } from './resDataTpl' // 引入返回数据模板
 
 export async function getUserInfo(ctx) {
-  const id = ctx.params.id; // 获取url里传过来的参数里的id
-  const user = await userModel.getUserById(id);
+  const id = ctx.params.id // 获取url里传过来的参数里的id
+  const user = await userModel.getUserById(id)
   if (user) {
     resDataTpl.success = true
     resDataTpl.message = '查询成功'
@@ -21,8 +19,8 @@ export async function getUserInfo(ctx) {
 }
 
 export async function postUserAuth(ctx) {
-  const data = ctx.request.body; // post过来的数据存在request.body里
-  const userInfo = await userModel.getUserByName(data.username); // 数据库返回的数据
+  const data = ctx.request.body // post过来的数据存在request.body里
+  const userInfo = await userModel.getUserByName(data.username) // 数据库返回的数据
 
   if (!userInfo) {
     resDataTpl.success = false
@@ -42,9 +40,9 @@ export async function postUserAuth(ctx) {
     iss: config.userToken.iss,
     name: userInfo.username,
     id: userInfo.id
-  };
-  const secret = serverConfig.jwtSecret; // 指定密钥，这是之后用来判断token合法性的标志
-  const token = JWT.sign(userToken, secret); // 签发token
+  }
+  const secret = serverConfig.jwtSecret // 指定密钥，这是之后用来判断token合法性的标志
+  const token = JWT.sign(userToken, secret) // 签发token
   resDataTpl.success = true
   resDataTpl.message = '登录成功'
   resDataTpl.data = token
