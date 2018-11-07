@@ -35,11 +35,7 @@ export const fetch = config => {
 }
 
 // 封装调用的接口 getData
-export const getData = (url, type, data) => {
-  // 如果type为空，默认为post方法，也可以自己改成get
-  if (type === '') {
-    type = 'post'
-  }
+export const getData = (url = '/api/data', type = 'post', data = {}) => {
   return fetch({
     // 这里的url为baseURL下接口地址，如baseURL为'www.baidu.com',接口地址为'www.baidu.com/api/getdata',那么url里就写'api/getdata'
     url: url,

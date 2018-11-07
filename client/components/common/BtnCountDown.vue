@@ -27,9 +27,11 @@ export default {
   methods: {
     async fnSendMsg() {
       let vm = this
-      vm.sendMsgOnce = false
       let result = await commonReq('sendMsg', vm.parmas)
-      if (result.success) {
+      vm.sendMsgOnce = false
+      if (result.data.success) {
+        vm.utils.messageFn('发送验证码成功')
+        let curCount = 60
         vm.interVal = window.setInterval(() => {
           if (curCount === 0) {
             window.clearInterval(vm.interVal) // 停止计时器
@@ -44,7 +46,7 @@ export default {
         }, 1000)
       } else {
         vm.sendMsgOnce = true //按钮控制发送
-        vm.utils.errorFn(error.message)
+        vm.utils.errorFn(result.data.message)
       }
     }
   }

@@ -42,18 +42,63 @@ export const messageFn = (
   content = '操作成功',
   duration = 1.5,
   closable = false,
-  fn
+  fn = () => {
+    return false
+  }
 ) => {
-  Vue.prototype.$message[type]({
+  if (content === undefined || typeof content === 'function') {
+    content = type
+    title = 'success'
+  }
+  let params = {
     content: content,
     duration: duration,
     closable: closable,
     onClose: fn
-  })
+  }
+  let message = Vue.prototype.$Message
+  switch (type) {
+    case 'success':
+      message.success(params)
+      break
+    case 'error':
+      message.error(params)
+      break
+    case 'warning':
+      message.warning(params)
+      break
+    case 'info':
+      message.info(params)
+      break
+    default:
+      message.success(params)
+  }
+  // if (type === 'success') {
+
+  // } else if (type === 'error') {
+  //   message.error(params)
+  // } else if (type === 'warning') {
+  //   message.warning(params)
+  // } else if (type === 'info') {
+  //   message.info(params)
+  // } else {
+  //   message.success(params)
+  // }
 }
 
-export const errorFn = (content = '操作失败', fn) => {
+export const errorFn = (
+  title = '错误提示',
+  content,
+  fn = () => {
+    return false
+  }
+) => {
+  if (content === undefined || typeof content === 'function') {
+    content = title
+    title = '错误提示'
+  }
   Vue.prototype.$Modal.error({
+    title: title,
     content: content,
     'mask-closable': false,
     onOk: fn
@@ -72,41 +117,23 @@ export const catchError = (error = {}) => {
   if (error.response) {
     switch (error.response.status) {
       case 400:
-        Vue.prototype.$Modal.error({
-          title: '错误提示',
-          content: error.response.data.message || '请求参数异常',
-          onOk: () => {
-            return false
-          }
-        })
+        errorFn(error.response.data.message || '请求参数异常！')
         break
       case 401:
-        Vue.prototype.$Modal.error({
-          title: '错误提示',
-          content: error.response.data.message || '密码错误或账号不存在！',
-          onOk: () => {
-            return false
-          }
-        })
+        errorFn(error.response.data.message || '密码错误或账号不存在！')
         break
       case 403:
-        Vue.prototype.$Modal.error({
-          title: '错误提示',
-          content:
-            error.response.data.message || '无访问权限，请联系企业管理员',
-          onOk: () => {
-            return false
-          }
-        })
+        errorFn(error.response.data.message || '无访问权限，请联系企业管理员！')
         break
       default:
-        Vue.prototype.$Modal.error({
-          title: '错误提示',
-          content: error.response.data.message || '服务端异常，请联系技术支持',
-          onOk: () => {
-            return false
-          }
-        })
+        errorFn(error.response.data.message || '无访问权限，请联系企业管理员！')
+      // Vue.prototype.$Modal.error({
+      //   title: '错误提示',
+      //   content: error.response.data.message || '服务端异常，请联系技术支持',
+      //   onOk: () => {
+      //     return false
+      //   }
+      // })
     }
   }
   return Promise.reject(error)
@@ -463,6 +490,7 @@ const utils = {
   install(Vue) {
     Vue.prototype.utils = {
       session: session,
+      errorFn: errorFn,
       catchError: catchError,
       addUnit: addUnit,
       firstUpperCase: firstUpperCase,
