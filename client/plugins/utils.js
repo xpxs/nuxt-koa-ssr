@@ -56,34 +56,23 @@ export const messageFn = (
     closable: closable,
     onClose: fn
   }
-  let message = Vue.prototype.$Message
+  let Message = Vue.prototype.$Message
   switch (type) {
     case 'success':
-      message.success(params)
+      Message.success(params)
       break
     case 'error':
-      message.error(params)
+      Message.error(params)
       break
     case 'warning':
-      message.warning(params)
+      Message.warning(params)
       break
     case 'info':
-      message.info(params)
+      Message.info(params)
       break
     default:
-      message.success(params)
+      Message.success(params)
   }
-  // if (type === 'success') {
-
-  // } else if (type === 'error') {
-  //   message.error(params)
-  // } else if (type === 'warning') {
-  //   message.warning(params)
-  // } else if (type === 'info') {
-  //   message.info(params)
-  // } else {
-  //   message.success(params)
-  // }
 }
 
 export const errorFn = (

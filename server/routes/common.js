@@ -5,6 +5,7 @@ const router = Router()
 
 // 用户列表
 router.get('/getMsg', async (ctx, next) => {
+  console.log('ctx', ctx.query)
   resDataTpl.success = true
   resDataTpl.message = '发送验证码成功'
   ctx.body = resDataTpl
