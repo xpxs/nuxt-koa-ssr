@@ -32,7 +32,11 @@ module.exports = {
   css: [
     'iview/dist/styles/iview.css',
     '@/static/css/common.css',
-    '@/static/css/main.css'
+    '@/static/css/main.css',
+    {
+      src: '@/static/sass/admin-main.scss',
+      lang: 'scss'
+    }
   ],
   /*
    ** Customize the progress-bar color

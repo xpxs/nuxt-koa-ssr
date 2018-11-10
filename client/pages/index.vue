@@ -22,8 +22,7 @@ export default {
   data() {
     return {
       dateParmas: {
-        type: 'daterange',
-        value: ['2', '3']
+        type: 'daterange'
       },
       parmas: {
         mobile: '13562014710'

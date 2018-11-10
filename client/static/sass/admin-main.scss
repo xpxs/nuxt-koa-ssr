@@ -1,3 +1,58 @@
+$whiteTransparent: rgba(255,255,255,0.2);
+
 .particles{
 	background: #111;
+}
+.extend-header{
+	background: linear-gradient(120deg, #00e4d0, #5983e8);
+  transition: background 0.25s ease;
+  -webkit-transition: background 0.25s ease;
+  -moz-transition: background 0.25s ease;
+  -ms-transition: background 0.25s ease;
+  color: #fff;
+  .left-nav{
+  	line-height: 64px;
+  	color: #fff;
+    i{
+      font-size: 14px;
+    }
+  	a{
+  		color: #fff;
+  		padding: 0 20px;
+  		display: block;
+  		float: left;
+  	}
+  	a.on{
+  		background: $whiteTransparent;
+  	}
+  }
+  .right-nav{
+    float: right;
+    margin-top: 15px;
+    .ivu-badge{
+      margin:0 5px;
+      padding: 5px;
+      opacity: 0.8;
+      i{
+        font-size: 24px;
+      }
+      &:hover{
+        background: $whiteTransparent;
+        border-radius: 50%;
+        transition: 0.5s;
+        opacity: 1;
+      }
+      .ivu-badge-dot{
+        top: 0;
+        right: 0;
+      }
+    }
+  }
+}
+.extend-content{
+	padding: 1.5em;
+	background: #f2f8f9;
+}
+.extend-sider{
+	background: #fff;
 }

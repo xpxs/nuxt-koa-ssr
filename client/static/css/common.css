@@ -299,3 +299,6 @@ img{
 .bold{
   font-weight: bolder;
 }
+.h64{
+  height: 64px;
+}

@@ -2,7 +2,8 @@
   <DatePicker 
     :value="value"
     :type="parmas.type"
-    placeholder="请选择时间"/>
+    placeholder="请选择时间"
+    @on-change="fnOnChange"/>
 </template>
 <script>
 export default {
@@ -12,8 +13,7 @@ export default {
       required: true,
       default() {
         return {
-          type: 'date',
-          value: ''
+          type: 'date'
         }
       }
     }
@@ -23,14 +23,13 @@ export default {
       value: this.parmas.value
     }
   },
-  watch: {
-    value(val) {
-      console.log('val', val)
-      this.$emit('fnChange', val)
-    }
-  },
   mounted() {
     this.value = this.parmas.value
+  },
+  methods: {
+    fnOnChange(val) {
+      this.$emit('fnChange', val)
+    }
   }
 }
 </script>

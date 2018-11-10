@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <Layout>
     <nuxt/>
     <my-footer/>
-  </div>
+  </Layout>
 </template>
 
 <script>
-import MyFooter from '@/components/Footer.vue'
+import MyFooter from '@/components/front/Footer.vue'
 
 export default {
   components: {
