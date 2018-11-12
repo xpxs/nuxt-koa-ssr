@@ -43,15 +43,22 @@
         class="extend-sider">
         <menus/>
       </Sider>
-      <Content class="extend-content"><nuxt/></Content>
+      <Content class="extend-content">
+        <nav-tab/>
+        <div class="containter">
+          <nuxt/>
+        </div>
+      </Content>
     </Layout>
   </Layout>
 </template>
 <script>
 import Menus from '@/components/admin/Menus.vue'
+import NavTab from '@/components/admin/NavTab.vue'
 export default {
   components: {
-    menus: Menus
+    menus: Menus,
+    'nav-tab': NavTab
   },
   data() {
     return {}

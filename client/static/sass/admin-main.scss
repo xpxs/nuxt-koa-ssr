@@ -54,8 +54,16 @@ $whiteTransparent: rgba(255,255,255,0.2);
   }
 }
 .extend-content{
-	padding: 1.5em;
+	padding: 0;
 	background: #f2f8f9;
+  .nav-tab{
+    padding: 0.5em;
+    background: rgba(255,255,255,0.9);
+    box-shadow: 0 1px 10px rgba(235,235,235,0.8);
+  }
+  .containter{
+    padding: 0.6em 1em;
+  }
 }
 .extend-sider{
 	background: #fff;
