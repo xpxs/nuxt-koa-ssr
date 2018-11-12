@@ -18,6 +18,7 @@ export const mutations = {
   }
 }
 export const getters = {}
+//页面执行方法
 export const actions = {
   addTab({ commit }, tab) {
     commit('ADD_TAB', tab)
