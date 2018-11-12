@@ -1,5 +1,8 @@
 $whiteTransparent: rgba(255,255,255,0.2);
 
+#__nuxt,#__layout{
+  height: 100%;
+}
 .particles{
 	background: #111;
 }
@@ -10,6 +13,7 @@ $whiteTransparent: rgba(255,255,255,0.2);
   -moz-transition: background 0.25s ease;
   -ms-transition: background 0.25s ease;
   color: #fff;
+  overflow: hidden;
   .left-nav{
   	line-height: 64px;
   	color: #fff;
@@ -55,4 +59,10 @@ $whiteTransparent: rgba(255,255,255,0.2);
 }
 .extend-sider{
 	background: #fff;
+  .left-nav-width{
+    width: 200px !important;
+    &:after{
+      background: #fff;
+    }
+  }
 }

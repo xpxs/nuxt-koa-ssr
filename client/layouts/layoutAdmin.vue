@@ -1,5 +1,5 @@
 <template>
-  <Layout>
+  <Layout style="height: 100%;">
     <Layout class="h64">
       <Sider 
         hide-trigger 
@@ -37,11 +37,24 @@
         </div>
       </Content>
     </Layout>
-    <Layout>
+    <Layout style="height: 100%;">
       <Sider 
         hide-trigger 
-        class="extend-sider">Sider</Sider>
+        class="extend-sider">
+        <menus/>
+      </Sider>
       <Content class="extend-content"><nuxt/></Content>
     </Layout>
   </Layout>
 </template>
+<script>
+import Menus from '@/components/admin/Menus.vue'
+export default {
+  components: {
+    menus: Menus
+  },
+  data() {
+    return {}
+  }
+}
+</script>
