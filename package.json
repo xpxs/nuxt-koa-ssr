@@ -5,6 +5,7 @@
   "author": "junner8909 <908900776@qq.com>",
   "private": true,
   "scripts": {
+    "fix-memory-limit": "cross-env LIMIT=4096 increase-memory-limit",
     "dev": "cross-env __ENV='development' && backpack dev",
     "alpha:build": "cross-env __ENV=alpha && nuxt build && backpack build",
     "alpha:start": "cross-env __ENV=alpha node build/main.js",
@@ -26,6 +27,7 @@
     "cross-env": "^5.0.1",
     "es6-promise": "^4.2.5",
     "fs": "^0.0.1-security",
+    "increase-memory-limit": "^1.0.6",
     "iview": "^3.1.3",
     "koa": "^2.4.1",
     "koa-bodyparser": "^4.2.1",

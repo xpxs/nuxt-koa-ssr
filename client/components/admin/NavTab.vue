@@ -1,27 +1,44 @@
 <template>
   <div class="nav-tab">
-    <Button 
-      type="primary" 
-      size="small"
-      to="/admin">首页</Button>
-    <Button 
-      type="primary" 
-      size="small" 
-      to="/admin/users">用户管理 <Icon type="ios-close" /></Button>
+    <Tabs
+      :value="activeIndex"
+      type="card"
+      @on-click="fnOnClick"
+      @on-tab-remove="handleTabRemove">
+      <TabPane 
+        v-for="item in tabs" 
+        :label="item.name"
+        :closable="item.path !== '/admin'" 
+        :key="item.id" 
+        :name="item.path"/>
+    </Tabs>
   </div>
 </template>
 <script>
 export default {
   data() {
-    return {
-      tab0: true,
-      tab1: true,
-      tab2: true
+    return {}
+  },
+  computed: {
+    tabs() {
+      return this.$store.state.tabs
+    },
+    activeIndex() {
+      return this.$store.state.activeIndex
     }
   },
   methods: {
     handleTabRemove(data) {
       console.log('data', data)
+      this.$store.dispatch('removeTab', data)
+      let tabs = this.$store.state.tabs
+      let path = tabs[tabs.length - 1].path
+      this.$store.dispatch('setActiveIndex', path)
+      this.$router.push({ path: path })
+    },
+    fnOnClick(data) {
+      this.$store.dispatch('setActiveIndex', data)
+      this.$router.push({ path: data })
     }
   }
 }

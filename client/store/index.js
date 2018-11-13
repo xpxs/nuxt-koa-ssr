@@ -1,3 +1,4 @@
+import vue from 'vue'
 export const state = () => ({
   tabs: [{ name: '首页', path: '/admin' }],
   activeIndex: '/admin'
@@ -9,12 +10,17 @@ export const mutations = {
   },
   //删除tab
   REMOVE_TAB(state, tab) {
-    state.tabs.push(tab)
+    vue.prototype._.remove(state.tabs, function(n) {
+      return n.path === tab
+    })
   },
   //清空tab
   DROP_TAB(state, tab) {
     state.tabs.length = 0
     state.tabs = [{ name: '首页', path: '/admin' }]
+  },
+  SET_ACTIVE_INDEX(state, index) {
+    state.activeIndex = index
   }
 }
 export const getters = {}
@@ -28,5 +34,8 @@ export const actions = {
   },
   dropTab({ commit }) {
     commit('DROP_TAB')
+  },
+  setActiveIndex({ commit }, index) {
+    commit('SET_ACTIVE_INDEX', index)
   }
 }

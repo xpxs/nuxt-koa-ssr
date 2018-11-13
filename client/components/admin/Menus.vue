@@ -1,13 +1,15 @@
 <template>
   <Menu 
+    :active-name="activeIndex"
     theme="light"
     accordion
-    class="left-nav-width">
+    class="left-nav-width"
+    @on-select="fnOnSelect">
     <template v-for="item in navData">
       <Submenu 
         v-if="item.children.length > 0"
         :key="item.id"
-        :name="item.id">
+        :name="item.label + '!!' + item.route">
         <template slot="title">
           <Icon :type="item.icon" />
           {{ item.label }}
@@ -15,14 +17,14 @@
         <MenuItem 
           v-for="cItem in item.children"
           :key="cItem.id"
-          :name="cItem.id" 
+          :name="cItem.label + '!!' + cItem.route" 
           :to="cItem.route" 
           replace>{{ cItem.label }}</MenuItem>
       </Submenu>
       <MenuItem 
         v-else
         :key="item.id"
-        :name="item.id"
+        :name="item.label + '!!' + item.route"
         :to="item.route">
       <Icon 
         :key="item.id" 
@@ -130,6 +132,34 @@ export default {
           ]
         }
       ]
+    }
+  },
+  computed: {
+    activeIndex() {
+      let vm = this
+      let name = ''
+      vm.$store.state.tabs.forEach((value, index) => {
+        if (value.path === vm.$store.state.activeIndex) {
+          name = value.name + '!!' + value.path
+        }
+      })
+      return name
+    }
+  },
+  methods: {
+    fnOnSelect(value) {
+      let vm = this
+      let path = value.split('!!')[1]
+      let name = value.split('!!')[0]
+      let tab = { name: name, path: path }
+      vm.$store.dispatch('setActiveIndex', path)
+      if (
+        vm._.findIndex(vm.$store.state.tabs, tab) < 1 &&
+        path !== '/admin' &&
+        name !== '首页'
+      ) {
+        vm.$store.dispatch('addTab', tab)
+      }
     }
   }
 }
