@@ -15,23 +15,27 @@
         </div>
         <div class="right-nav">
           <Badge dot>
-            <Icon 
-              type="md-notifications" 
-              title="系统信息" />
+            <Avatar 
+              shape="circle" 
+              icon="md-notifications" 
+              title="系统信息"/>
           </Badge>
           <Badge dot>
-            <Icon 
-              type="md-person" 
-              title="用户信息" />
+            <Avatar 
+              shape="circle"
+              icon="md-person" 
+              title="用户信息"/>
           </Badge>
           <Badge>
-            <Icon 
-              type="md-lock" 
+            <Avatar 
+              shape="circle" 
+              icon="md-lock" 
               title="锁住账户"/>
           </Badge>
           <Badge>
-            <Icon 
-              type="md-power" 
+            <Avatar 
+              shape="circle" 
+              icon="md-power" 
               title="退出账户"/>
           </Badge>
         </div>
