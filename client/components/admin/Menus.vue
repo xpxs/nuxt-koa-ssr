@@ -3,6 +3,7 @@
     <Menu
       v-show="collapsed"
       :active-name="activeIndex"
+      :class="{'left-nav-width-collapsed': !collapsed}"
       theme="light"
       accordion
       class="left-nav-width"
@@ -33,7 +34,7 @@
           :type="item.icon" 
         />
         {{ item.label }}
-        </MenuItem>
+          </MenuItem>
       </template>
     </Menu>
     <div 
@@ -46,21 +47,24 @@
           trigger="hover"
           placement="right">
           <template slot="content">
-            <nuxt-link :to="item.route">{{ item.label }}</nuxt-link>
+            <span
+              @click="fnOnSelect(item.label + '!!' + item.route)">{{ item.label }}</span>
           </template>
           <Icon :type="item.icon"/>
         </Poptip>
         <Dropdown 
           v-else
           :key="item.id"
-          placement="right">
+          placement="right"
+          @on-click="fnOnSelect">
           <a href="javascript:void(0)">
             <Icon :type="item.icon"/>
           </a>
           <DropdownMenu 
             slot="list">
             <DropdownItem 
-              v-for="cItem in item.children" 
+              v-for="cItem in item.children"
+              :name="cItem.label + '!!' + cItem.route" 
               :key="cItem.id">{{ cItem.label }}</DropdownItem>
           </DropdownMenu>
         </Dropdown>
@@ -195,6 +199,7 @@ export default {
       let name = value.split('!!')[0]
       let tab = { name: name, path: path }
       vm.$store.dispatch('setActiveIndex', path)
+      vm.$router.push({ path: path })
       if (
         vm._.findIndex(vm.$store.state.tabs, tab) < 1 &&
         path !== '/admin' &&
@@ -212,8 +217,10 @@ export default {
   .ivu-poptip,
   .ivu-dropdown {
     text-align: center;
+    cursor: pointer;
     width: 60px;
-    line-height: 2.4;
+    line-height: 50px;
+    position: relative;
   }
 }
 </style>

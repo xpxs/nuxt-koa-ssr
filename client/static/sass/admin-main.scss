@@ -84,10 +84,24 @@ $whiteTransparent: rgba(255,255,255,0.2);
       background: #fff;
     }
   }
+  .left-nav-width-collapsed{
+    width: 60px !important;
+  }
 }
 .extend-collapsed-sider{
   width:60px !important;
   min-width:60px !important;
   max-width:60px !important;
   flex:0 0 60px !important;
+  .ivu-poptip-rel {
+    width: 60px;
+  }
+  .ivu-select-dropdown {
+    width: 100px !important;
+  }
+  .ivu-dropdown-rel{
+    a{
+      color: #515a6e;
+    }
+  }
 }
