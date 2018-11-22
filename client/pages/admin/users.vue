@@ -2,10 +2,9 @@
   <div>
     <search-columns 
       :params="formParams" 
-      @fnChangeForm="fnSearch"/>
-    <table-template 
-      :params="tableParams"/>
-    <pagetion :params="pageParams"/>
+      @fnChangeForm="fnSearch" />
+    <table-template :params="tableParams" />
+    <pagetion :params="pageParams" />
   </div>
 </template>
 <script>

@@ -21,8 +21,10 @@ $ npm run X:pm2
 
 # generate static project 静态打包
 $ npm run generate
-```
 
+# nodejs >= 8.11.4
+
+```
 *Note: Due to a bug in yarn's engine version detection code if you are
 using a prerelease version of Node (i.e. v7.6.0-rc.1) you will need to either:
   1. Use `npm install`
