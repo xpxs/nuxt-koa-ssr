@@ -14,13 +14,13 @@ import { getData } from '@/api/axios.js'
 export const session = (key = '', value) => {
   if (value === undefined) {
     let lsVal = localStorage.getItem(key)
-    if (lsVal && lsVal.indexOf('autostringify-') === 0) {
-      return JSON.parse(lsVal.split('autostringify-')[1])
+    if (lsVal && lsVal.indexOf('stringify-') === 0) {
+      return JSON.parse(lsVal.split('stringify-')[1])
     }
     return lsVal
   }
   if (typeof value === 'object' || Array.isArray(value)) {
-    value = 'autostringify-' + JSON.stringify(value)
+    value = 'stringify-' + JSON.stringify(value)
   }
   return localStorage.setItem(key, value)
 }

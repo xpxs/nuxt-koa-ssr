@@ -4,15 +4,20 @@ export const state = () => ({
   activeIndex: '/admin'
 })
 export const mutations = {
+  ADD_SESSION_TAB(state, tabs) {
+    state.tabs = tabs
+  },
   //新增tab
   ADD_TAB(state, tab) {
     state.tabs.push(tab)
+    vue.prototype.utils.session('leftMenus', state.tabs)
   },
   //删除tab
   REMOVE_TAB(state, tab) {
     vue.prototype._.remove(state.tabs, function(n) {
       return n.path === tab
     })
+    vue.prototype.utils.session('leftMenus', state.tabs)
   },
   //清空tab
   DROP_TAB(state, tab) {
@@ -26,6 +31,9 @@ export const mutations = {
 export const getters = {}
 //页面执行方法
 export const actions = {
+  addSessionTab({ commit }, tabs) {
+    commit('ADD_SESSION_TAB', tabs)
+  },
   addTab({ commit }, tab) {
     commit('ADD_TAB', tab)
   },

@@ -85,3 +85,9 @@ $whiteTransparent: rgba(255,255,255,0.2);
     }
   }
 }
+.extend-collapsed-sider{
+  width:60px !important;
+  min-width:60px !important;
+  max-width:60px !important;
+  flex:0 0 60px !important;
+}

@@ -1,42 +1,84 @@
 <template>
-  <Menu 
-    :active-name="activeIndex"
-    theme="light"
-    accordion
-    class="left-nav-width"
-    @on-select="fnOnSelect">
-    <template v-for="item in navData">
-      <Submenu 
-        v-if="item.children.length > 0"
-        :key="item.id"
-        :name="item.label + '!!' + item.route">
-        <template slot="title">
-          <Icon :type="item.icon" />
-          {{ item.label }}
-        </template>
+  <div>
+    <Menu
+      v-show="collapsed"
+      :active-name="activeIndex"
+      theme="light"
+      accordion
+      class="left-nav-width"
+      @on-select="fnOnSelect">
+      <template v-for="item in navData">
+        <Submenu 
+          v-if="item.children.length > 0"
+          :key="item.id"
+          :name="item.label + '!!' + item.route">
+          <template slot="title">
+            <Icon :type="item.icon" />
+            {{ item.label }}
+          </template>
+          <MenuItem 
+            v-for="cItem in item.children"
+            :key="cItem.id"
+            :name="cItem.label + '!!' + cItem.route" 
+            :to="cItem.route" 
+            replace>{{ cItem.label }}</MenuItem>
+        </Submenu>
         <MenuItem 
-          v-for="cItem in item.children"
-          :key="cItem.id"
-          :name="cItem.label + '!!' + cItem.route" 
-          :to="cItem.route" 
-          replace>{{ cItem.label }}</MenuItem>
-      </Submenu>
-      <MenuItem 
-        v-else
-        :key="item.id"
-        :name="item.label + '!!' + item.route"
-        :to="item.route">
-      <Icon 
-        :key="item.id" 
-        :type="item.icon" 
-      />
-      {{ item.label }}
-      </MenuItem>
-    </template>
-  </Menu>
+          v-else
+          :key="item.id"
+          :name="item.label + '!!' + item.route"
+          :to="item.route">
+        <Icon 
+          :key="item.id" 
+          :type="item.icon" 
+        />
+        {{ item.label }}
+        </MenuItem>
+      </template>
+    </Menu>
+    <div 
+      v-show="!collapsed" 
+      class="menu-collapsed">
+      <template v-for="item in navData">
+        <Poptip
+          v-if="item.children.length === 0"
+          :key="item.id"
+          trigger="hover"
+          placement="right">
+          <template slot="content">
+            <nuxt-link :to="item.route">{{ item.label }}</nuxt-link>
+          </template>
+          <Icon :type="item.icon"/>
+        </Poptip>
+        <Dropdown 
+          v-else
+          :key="item.id"
+          placement="right">
+          <a href="javascript:void(0)">
+            <Icon :type="item.icon"/>
+          </a>
+          <DropdownMenu 
+            slot="list">
+            <DropdownItem 
+              v-for="cItem in item.children" 
+              :key="cItem.id">{{ cItem.label }}</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+      </template>
+    </div>
+  </div>
 </template>
 <script>
 export default {
+  props: {
+    collapsed: {
+      type: Boolean,
+      required: true,
+      default() {
+        return false
+      }
+    }
+  },
   data() {
     return {
       navData: [
@@ -164,3 +206,14 @@ export default {
   }
 }
 </script>
+<style scoped lang="scss">
+.menu-collapsed {
+  width: 60px;
+  .ivu-poptip,
+  .ivu-dropdown {
+    text-align: center;
+    width: 60px;
+    line-height: 2.4;
+  }
+}
+</style>

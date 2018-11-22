@@ -14,6 +14,9 @@
           <nuxt-link to="/"><Icon type="ios-flower" /> 公众号管理</nuxt-link>
         </div>
         <div class="right-nav">
+          <Button 
+            type="primary" 
+            @click="collapsed = !collapsed">切换</Button>
           <Badge dot>
             <Avatar 
               shape="circle" 
@@ -43,9 +46,10 @@
     </Layout>
     <Layout style="height: 100%;">
       <Sider 
-        hide-trigger 
+        :class="{'extend-collapsed-sider':!collapsed}" 
+        hide-trigger
         class="extend-sider">
-        <menus/>
+        <menus :collapsed="collapsed"/>
       </Sider>
       <Content class="extend-content">
         <nav-tab/>
@@ -65,7 +69,9 @@ export default {
     'nav-tab': NavTab
   },
   data() {
-    return {}
+    return {
+      collapsed: true
+    }
   }
 }
 </script>
