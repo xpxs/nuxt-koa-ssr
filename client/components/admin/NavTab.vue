@@ -29,23 +29,16 @@ export default {
   },
   mounted() {
     let vm = this
-    //获得当前路由
-    let pathname = location.pathname
-    vm.$store.dispatch('setActiveIndex', pathname)
-    vm.$router.push({ path: pathname })
     //获得localStorge里的打开菜单的数据
-    let tabs = vm.utils.session('leftMenus')
-    vm.$store.dispatch('addSessionTab', tabs)
   },
   methods: {
     handleTabRemove(data) {
-      console.log('data', data)
       let vm = this
-      vm.$store.dispatch('removeTab', data)
       let tabs = vm.$store.state.tabs
       let path = tabs[tabs.length - 1].path
-      vm.$store.dispatch('setActiveIndex', path)
       vm.$router.push({ path: path })
+      vm.$store.dispatch('setActiveIndex', path)
+      vm.$store.dispatch('removeTab', data)
     },
     fnOnClick(data) {
       let vm = this

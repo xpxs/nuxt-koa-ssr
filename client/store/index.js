@@ -1,6 +1,6 @@
 import vue from 'vue'
 export const state = () => ({
-  tabs: [{ name: '首页', path: '/admin' }],
+  tabs: [],
   activeIndex: '/admin'
 })
 export const mutations = {
@@ -9,15 +9,18 @@ export const mutations = {
   },
   //新增tab
   ADD_TAB(state, tab) {
+    if (state.tabs === null) {
+      state.tabs = []
+    }
     state.tabs.push(tab)
-    vue.prototype.utils.session('leftMenus', state.tabs)
+    vue.prototype.utils.session('a-leftMenus', state.tabs)
   },
   //删除tab
   REMOVE_TAB(state, tab) {
     vue.prototype._.remove(state.tabs, function(n) {
       return n.path === tab
     })
-    vue.prototype.utils.session('leftMenus', state.tabs)
+    vue.prototype.utils.session('a-leftMenus', state.tabs)
   },
   //清空tab
   DROP_TAB(state, tab) {

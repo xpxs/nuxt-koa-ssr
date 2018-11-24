@@ -184,7 +184,11 @@ export default {
     activeIndex() {
       let vm = this
       let name = ''
-      vm.$store.state.tabs.forEach((value, index) => {
+      let tabs = vm.$store.state.tabs
+      if (!vm.$store.state.tabs) {
+        vm.$store.dispatch('addTab', { name: '首页', path: '/admin' })
+      }
+      tabs.forEach((value, index) => {
         if (value.path === vm.$store.state.activeIndex) {
           name = value.name + '!!' + value.path
         }

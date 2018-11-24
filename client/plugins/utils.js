@@ -2,6 +2,14 @@
 import Vue from 'vue'
 import { getData } from '@/api/axios.js'
 
+export const localStorageRemoveItem = keys => {
+  keys = keys || ['a-leftMenus', 'a-token']
+  for (var i = 0; i <= keys.length; i++) {
+    if (localStorage.getItem(keys[i])) {
+      localStorage.removeItem(keys[i])
+    }
+  }
+}
 /**
  * [获取与存储sessionStorage]
  * @Author   tanpeng
@@ -475,9 +483,34 @@ export const UUID = () => {
   return uuid
 }
 
+/**
+ * [超过时间清除localStorage的内容]
+ * @Author   tanpeng
+ * @DateTime 2018-11-22
+ * @version  [v1.0]
+ * @param    {[type]}   store [store状态管理器]
+ * @return   {[type]}         [description]
+ */
+export const diffTimesClearLocalStorage = (store, sessionName) => {
+  let thisTime = new Date().getTime()
+  let loginRetentionTime = session(sessionName)
+  if (loginRetentionTime) {
+    let timeDiff = thisTime - loginRetentionTime
+    if (timeDiff > 15 * 60 * 1000) {
+      store.dispatch('logout')
+      localStorageRemoveItem()
+    } else {
+      if (timeDiff > 5 * 60 * 1000) {
+        session(sessionName, thisTime)
+      }
+    }
+  }
+}
+
 const utils = {
   install(Vue) {
     Vue.prototype.utils = {
+      localStorageRemoveItem: localStorageRemoveItem,
       session: session,
       errorFn: errorFn,
       catchError: catchError,

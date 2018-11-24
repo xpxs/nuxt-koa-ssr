@@ -72,6 +72,19 @@ export default {
     return {
       collapsed: true
     }
+  },
+  mounted() {
+    let vm = this
+    //获得当前路由
+    let pathname = location.pathname
+    vm.$store.dispatch('setActiveIndex', pathname)
+    vm.$router.push({ path: pathname })
+    let tabs = vm.utils.session('a-leftMenus')
+    if (!tabs) {
+      tabs = [{ name: '首页', path: '/admin' }]
+      vm.utils.session('a-leftMenus', tabs)
+    }
+    vm.$store.dispatch('addSessionTab', tabs)
   }
 }
 </script>
