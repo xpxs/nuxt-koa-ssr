@@ -1,14 +1,49 @@
 'use strict'
 import * as userModel from '../model/userModel' // 引入userModel
 import { resDataTpl } from './resDataTpl' // 引入返回数据模板
+import { UserData } from '../common/utils' // user的Class类
 
+export async function getUsers(ctx) {
+  const pageSize = ctx.query.pageSize ? ctx.query.pageSize * 1 : 10
+  const pageNum = ctx.query.pageNum ? ctx.query.pageNum * 1 : 1
+  if (isNaN(pageSize) || isNaN(pageNum)) {
+    resDataTpl.success = false
+    resDataTpl.message = '参数不正确'
+    resDataTpl.data = null
+    ctx.body = resDataTpl
+    return
+  }
+  const users = await userModel.getUsersCount(pageNum, pageSize)
+  let userData = new UserData(users)
+  if (users) {
+    resDataTpl.success = true
+    resDataTpl.message = '查询成功'
+    resDataTpl.data = userData.list()
+    ctx.body = resDataTpl
+  } else {
+    resDataTpl.success = false
+    resDataTpl.message = '没有符合要求的用户'
+    resDataTpl.data = null
+    ctx.body = resDataTpl
+  }
+}
+
+/**
+ * [getUserInfo 查询单个用户信息]
+ * @Author   tanpeng
+ * @DateTime 2018-11-24
+ * @version  [v1.0]
+ * @param    {[type]}   ctx [description]
+ * @return   {[type]}       [description]
+ */
 export async function getUserInfo(ctx) {
   const id = ctx.params.id // 获取url里传过来的参数里的id
   const user = await userModel.getUserById(id)
+  let userData = new UserData(user)
   if (user) {
     resDataTpl.success = true
     resDataTpl.message = '查询成功'
-    resDataTpl.data = user
+    resDataTpl.data = userData.info()
     ctx.body = resDataTpl
   } else {
     resDataTpl.success = false

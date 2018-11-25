@@ -6,10 +6,12 @@ import * as userController from '../controller/userController' // 引入userCont
 const router = Router()
 
 // 用户列表
-router.get('/users/:id', async (ctx, next) => {
-  let values = Mock.mock(M_Users)
-  values.user_id = ctx.params.id
-  await userController.addOrUpdateUser(ctx, values)
-})
+router
+  .get('/api/users/:id', async (ctx, next) => {
+    await userController.getUserInfo(ctx)
+  })
+  .get('/api/getUsers', async (ctx, next) => {
+    await userController.getUsers(ctx)
+  })
 
 export default router

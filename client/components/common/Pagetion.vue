@@ -5,7 +5,9 @@
       :size="params.size"
       :show-elevator="params.showElevator"
       :show-sizer="params.showSizer"
-      :show-total="params.showTotal" />
+      :show-total="params.showTotal"
+      @on-page-size-change="fnPageSizeChange"
+      @on-change="fnPageNumChange" />
   </div>
 </template>
 <script>
@@ -17,6 +19,14 @@ export default {
       default() {
         return {}
       }
+    }
+  },
+  methods: {
+    fnPageNumChange(val) {
+      this.$emit('fnPageNumChange', val)
+    },
+    fnPageSizeChange(val) {
+      this.$emit('fnPageSizeChange', val)
     }
   }
 }

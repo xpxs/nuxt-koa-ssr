@@ -69,6 +69,7 @@
     "eslint-plugin-prettier": "2.6.2",
     "eslint-plugin-promise": "4.0.0",
     "eslint-plugin-standard": "4.0.0",
+    "eslint-plugin-vue": "4.7.1",
     "mysql2": "1.6.1",
     "nodemon": "1.11.0",
     "prettier": "1.14.3",
