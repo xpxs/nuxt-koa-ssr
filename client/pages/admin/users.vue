@@ -213,6 +213,7 @@ export default {
     params: {
       handler(nv, ov) {
         let vm = this
+        vm.tableParams.loading = true
         vm.reqData({
           url: 'getUsers',
           params: 'params',
@@ -264,11 +265,13 @@ export default {
      * @return   {[type]}        [description]
      */
     fnPageNumChange(data) {
-      this.params.pageNum = data
+      let vm = this
+      vm.params.pageNum = data
     },
     //切换每页数量
     fnPageSizeChange(data) {
-      this.params.pageSize = data
+      let vm = this
+      vm.params.pageSize = data
     },
     /**
      * [fnSearch 搜索返回数据,在里面处理与后台的数据交互]

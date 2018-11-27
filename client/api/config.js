@@ -1,7 +1,7 @@
 'use strict'
 export const ApiConfig = {
-  sendMsg: {
-    url: '/getMsg',
+  getMsg: {
+    url: '/api/getMsg',
     type: 'get'
   },
   getUsers: {

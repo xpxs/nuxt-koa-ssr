@@ -27,7 +27,7 @@ export default {
   methods: {
     async fnSendMsg() {
       let vm = this
-      let result = await commonReq('sendMsg', vm.parmas)
+      let result = await commonReq('getMsg', vm.parmas)
       vm.sendMsgOnce = false
       if (result.data.success) {
         vm.utils.messageFn(result.data.message)
