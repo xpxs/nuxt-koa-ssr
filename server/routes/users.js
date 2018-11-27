@@ -13,5 +13,8 @@ router
   .get('/api/getUsers', async (ctx, next) => {
     await userController.getUsers(ctx)
   })
+  .post('/api/updateUser', async (ctx, next) => {
+    await userController.updateUser(ctx)
+  })
 
 export default router

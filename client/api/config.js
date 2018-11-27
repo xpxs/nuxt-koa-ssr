@@ -7,5 +7,9 @@ export const ApiConfig = {
   getUsers: {
     url: '/api/getUsers',
     type: 'get'
+  },
+  updateUser: {
+    url: '/api/updateUser',
+    type: 'post'
   }
 }

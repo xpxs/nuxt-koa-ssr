@@ -18,9 +18,9 @@ async function start() {
   const port = CONFIG_API.PORT || 3000
 
   // routes
-  app.use(routes.routes(), routes.allowedMethods())
   app.use(bodyParser())
   app.use(convert(cors()))
+  app.use(routes.routes(), routes.allowedMethods())
 
   // Import and Set Nuxt.js options
   let config = require('../nuxt.config.js')

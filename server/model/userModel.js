@@ -6,6 +6,9 @@ const User = mysql.import(userSchema) // 将Sequelize与表结构对应
 
 export async function getUsersCount(pageNum, pageSize) {
   return await User.findAndCountAll({
+    where: {
+      unable: '1'
+    },
     limit: pageSize,
     offset: (pageNum - 1) * pageSize
   })
@@ -14,7 +17,8 @@ export async function getUsersCount(pageNum, pageSize) {
 export async function getUserById(id) {
   return await User.findOne({
     where: {
-      user_id: id
+      user_id: id,
+      unable: '1'
     }
   })
 }
@@ -29,11 +33,20 @@ export async function getUserById(id) {
 export async function getUserByName(username) {
   return await User.findOne({
     where: {
-      user_name: username
+      user_name: username,
+      unable: '1'
     }
   })
 }
 
-export async function addOrUpdateUser(values) {
+export async function addUser(values) {
   return await User.upsert(values)
+}
+
+export async function updateUser(values) {
+  return await User.update(values, {
+    where: {
+      user_id: values.user_id
+    }
+  })
 }

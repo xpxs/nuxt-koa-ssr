@@ -59,14 +59,35 @@ export async function getUserInfo(ctx) {
  * @version  [v1.0]
  * @param    {[type]}   ctx [koa封装变量]
  */
-export async function addOrUpdateUser(ctx, values) {
-  let data = await userModel.addOrUpdateUser(values)
+export async function addUser(ctx, values) {
+  let data = await userModel.addUser(values)
   if (data) {
     resDataTpl.message = '新增更新成功'
   } else {
     resDataTpl.message = '新增更新失败'
   }
   resDataTpl.success = data
+  resDataTpl.data = null
+  ctx.body = resDataTpl
+}
+
+export async function updateUser(ctx) {
+  let reqParams = ctx.request.body
+  let values = {}
+  for (let key in reqParams) {
+    //驼峰参数换成下划线
+    let k = key.replace(/([A-Z])/g, '_$1').toLowerCase()
+    values[k] = reqParams[key]
+  }
+  let data = await userModel.updateUser(values)
+  if (data[0] === 1) {
+    resDataTpl.message = '更新成功'
+    resDataTpl.success = true
+  } else {
+    resDataTpl.message = '更新失败'
+    resDataTpl.success = false
+  }
+  resDataTpl.data = null
   ctx.body = resDataTpl
 }
 

@@ -2,7 +2,7 @@
 import { getData } from './axios.js'
 import { ApiConfig } from './config.js'
 
-export const commonReq = async (key, params) => {
+export const commonReq = async (key = '', params = {}) => {
   let result = ''
   if (ApiConfig[key].type === 'post') {
     result = await getData(ApiConfig[key].url, ApiConfig[key].type, params)
@@ -14,6 +14,12 @@ export const commonReq = async (key, params) => {
     url = url.substring(0, url.length - 1) // 去掉最后一个&符号
 
     result = await getData(ApiConfig[key].url + url, ApiConfig[key].type)
+  } else if (ApiConfig[key].type === 'put') {
+    result = await getData(
+      ApiConfig[key].url + '/' + params.id,
+      ApiConfig[key].type,
+      params.params
+    )
   }
   return result
 }

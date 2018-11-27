@@ -54,7 +54,12 @@ export const messageFn = (
     return false
   }
 ) => {
-  if (content === undefined || typeof content === 'function') {
+  if (content === undefined) {
+    content = type
+    title = 'success'
+  }
+  if (typeof content === 'function') {
+    fn = content
     content = type
     title = 'success'
   }
@@ -90,7 +95,12 @@ export const errorFn = (
     return false
   }
 ) => {
-  if (content === undefined || typeof content === 'function') {
+  if (content === undefined) {
+    content = title
+    title = '错误提示'
+  }
+  if (typeof content === 'function') {
+    fn = content
     content = title
     title = '错误提示'
   }
@@ -507,6 +517,35 @@ export const diffTimesClearLocalStorage = (store, sessionName) => {
   }
 }
 
+export const rankName = rankId => {
+  let str = ''
+  rankId = rankId + ''
+  switch (rankId) {
+    case '1':
+      str = '普通会员'
+      break
+    case '2':
+      str = '白银会员'
+      break
+    case '3':
+      str = '黄金会员'
+      break
+    case '4':
+      str = '白金会员'
+      break
+    case '5':
+      str = '钻石会员'
+      break
+    case '6':
+      str = '白钻会员'
+      break
+    default:
+      str = '普通会员'
+      break
+  }
+  return str
+}
+
 const utils = {
   install(Vue) {
     Vue.prototype.utils = {
@@ -528,6 +567,7 @@ const utils = {
       countDown: countDown,
       clearNoNum: clearNoNum,
       UUID: UUID,
+      rankName: rankName,
       openProtocol: openProtocol
     }
   }

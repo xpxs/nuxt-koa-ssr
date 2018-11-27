@@ -18,6 +18,7 @@ export class UserData {
         userQQ: value.user_qq,
         userEmail: value.user_email,
         userAddress: value.user_address,
+        userFreeze: value.user_freeze,
         userRankId: value.user_rank_id
       })
     })
@@ -33,6 +34,7 @@ export class UserData {
       userQQ: this.data.user_qq,
       userEmail: this.data.user_email,
       userAddress: this.data.user_address,
+      userFreeze: this.data.user_freeze,
       userRankId: this.data.user_rank_id
     }
   }

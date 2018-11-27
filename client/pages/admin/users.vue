@@ -3,7 +3,7 @@
     <search-columns 
       :params="formParams" 
       @fnChangeForm="fnSearch" />
-    <table-template :params="tableParams" />
+    <table-template :params="formatTableParams" />
     <pagetion 
       :params="pageParams"
       @fnPageSizeChange="fnPageSizeChange" 
@@ -15,7 +15,7 @@ import Pagetion from '~/components/common/Pagetion.vue'
 import ReloadSpin from '~/components/common/ReloadSpin.vue'
 import SearchColumns from '~/components/admin/SearchColumns.vue'
 import TableTemplate from '~/components/admin/TableTemplate.vue'
-import { commonReq } from '@/api/commonReq'
+import { reqDataMixins } from '~/mixins'
 export default {
   layout: 'layoutAdmin',
   components: {
@@ -24,6 +24,7 @@ export default {
     'reload-spin': ReloadSpin,
     'search-columns': SearchColumns
   },
+  mixins: [reqDataMixins],
   data() {
     return {
       formParams: {
@@ -102,7 +103,41 @@ export default {
           },
           {
             title: '用户级别',
-            key: 'userRank'
+            key: 'userRankName'
+          },
+          {
+            title: '是否禁用',
+            key: 'userFreeze',
+            render: (h, params) => {
+              return h(
+                'i-switch',
+                {
+                  props: {
+                    type: 'primary',
+                    value: params.row.userFreeze === 1
+                  },
+                  on: {
+                    'on-change': value => {
+                      this.fnChangeUserFreeze(value, params.row)
+                    }
+                  }
+                },
+                [
+                  h('span', {
+                    slot: 'open',
+                    domProps: {
+                      innerHTML: '启'
+                    }
+                  }),
+                  h('span', {
+                    slot: 'close',
+                    domProps: {
+                      innerHTML: '禁'
+                    }
+                  })
+                ]
+              )
+            }
           },
           {
             title: '操作',
@@ -158,33 +193,67 @@ export default {
       params: {
         pageNum: 0,
         pageSize: 10
+      },
+      userFreezeParams: {
+        userId: '',
+        userFreeze: ''
       }
+    }
+  },
+  computed: {
+    formatTableParams() {
+      let vm = this
+      vm.tableParams.data.forEach((v, i) => {
+        v.userRankName = vm.utils.rankName(v.userRankId)
+      })
+      return vm.tableParams
     }
   },
   watch: {
     params: {
       handler(nv, ov) {
-        this.reqData()
+        let vm = this
+        vm.reqData({
+          url: 'getUsers',
+          params: 'params',
+          success: res => {
+            vm.tableParams.data = res.data.data.rows
+            vm.tableParams.loading = false
+            vm.tableParams.total = res.data.data.count
+          },
+          error: res => {
+            vm.utils.errorFn(res.data.message, () => {
+              vm.tableParams.loading = false
+            })
+          }
+        })
       },
       deep: true
     }
   },
   created() {
-    this.params.pageNum = 1
+    this.params.pageNum = '1'
   },
   methods: {
-    async reqData() {
+    fnChangeUserFreeze(value, row) {
       let vm = this
-      vm.tableParams.loading = true
-      let result = await commonReq('getUsers', vm.params)
-      if (result.data.success) {
-        vm.tableParams.data = result.data.data.rows
-        vm.tableParams.loading = false
-        vm.pageParams.total = result.data.data.count
+      vm.userFreezeParams.userId = 5
+      if (value) {
+        vm.userFreezeParams.userFreeze = 1
       } else {
-        vm.tableParams.loading = false
-        vm.utils.errorFn(result.data.message)
+        vm.userFreezeParams.userFreeze = 0
       }
+      vm.reqData({
+        url: 'updateUser',
+        params: 'userFreezeParams',
+        success: res => {
+          vm.utils.messageFn(res.data.message)
+          console.log('res', res)
+        },
+        error: res => {
+          vm.utils.errorFn(res.data.message, () => {})
+        }
+      })
     },
     /**
      * [切换页码]
@@ -197,6 +266,7 @@ export default {
     fnPageNumChange(data) {
       this.params.pageNum = data
     },
+    //切换每页数量
     fnPageSizeChange(data) {
       this.params.pageSize = data
     },
