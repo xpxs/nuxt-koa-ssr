@@ -30,7 +30,7 @@ export default {
       let result = await commonReq('sendMsg', vm.parmas)
       vm.sendMsgOnce = false
       if (result.data.success) {
-        vm.utils.messageFn('发送验证码成功')
+        vm.utils.messageFn(result.data.message)
         let curCount = 60
         vm.interVal = window.setInterval(() => {
           if (curCount === 0) {

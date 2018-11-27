@@ -39,3 +39,13 @@ export class UserData {
     }
   }
 }
+
+export class ResDataTpl {
+  data() {
+    return {
+      success: false,
+      message: '',
+      data: null
+    }
+  }
+}

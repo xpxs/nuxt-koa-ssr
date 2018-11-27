@@ -1,11 +1,11 @@
 'use strict'
 import * as userModel from '../model/userModel' // 引入userModel
-import { resDataTpl } from './resDataTpl' // 引入返回数据模板
-import { UserData } from '../common/utils' // user的Class类
+import { UserData, ResDataTpl } from '../common/utils' // user的Class类
 
 export async function getUsers(ctx) {
   const pageSize = ctx.query.pageSize ? ctx.query.pageSize * 1 : 10
   const pageNum = ctx.query.pageNum ? ctx.query.pageNum * 1 : 1
+  let resDataTpl = new ResDataTpl().data()
   if (isNaN(pageSize) || isNaN(pageNum)) {
     resDataTpl.success = false
     resDataTpl.message = '参数不正确'
@@ -40,6 +40,7 @@ export async function getUserInfo(ctx) {
   const id = ctx.params.id // 获取url里传过来的参数里的id
   const user = await userModel.getUserById(id)
   let userData = new UserData(user)
+  let resDataTpl = new ResDataTpl().data()
   if (user) {
     resDataTpl.success = true
     resDataTpl.message = '查询成功'
@@ -60,6 +61,7 @@ export async function getUserInfo(ctx) {
  * @param    {[type]}   ctx [koa封装变量]
  */
 export async function addUser(ctx, values) {
+  let resDataTpl = new ResDataTpl().data()
   let data = await userModel.addUser(values)
   if (data) {
     resDataTpl.message = '新增更新成功'
@@ -73,6 +75,8 @@ export async function addUser(ctx, values) {
 
 export async function updateUser(ctx) {
   let reqParams = ctx.request.body
+  let resDataTpl = new ResDataTpl().data()
+  console.log('resDataTpl',resDataTpl)
   let values = {}
   for (let key in reqParams) {
     //驼峰参数换成下划线
@@ -87,25 +91,22 @@ export async function updateUser(ctx) {
     resDataTpl.message = '更新失败'
     resDataTpl.success = false
   }
-  resDataTpl.data = null
   ctx.body = resDataTpl
 }
 
 export async function postUserAuth(ctx) {
   const data = ctx.request.body // post过来的数据存在request.body里
   const userInfo = await userModel.getUserByName(data.username) // 数据库返回的数据
-
+  let resDataTpl = new ResDataTpl().data()
   if (!userInfo) {
     resDataTpl.success = false
     resDataTpl.message = '用户不存在'
-    resDataTpl.data = null
     ctx.body = resDataTpl
     return
   }
   if (!bcrypt.compareSync(data.password, userInfo.password)) {
     resDataTpl.success = false
     resDataTpl.message = '密码错误'
-    resDataTpl.data = null
     ctx.body = resDataTpl
     return
   }

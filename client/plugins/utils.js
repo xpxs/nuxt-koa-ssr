@@ -47,7 +47,7 @@ export const session = (key = '', value) => {
  */
 export const messageFn = (
   type = 'success',
-  content = '操作成功',
+  content,
   duration = 1.5,
   closable = false,
   fn = () => {
@@ -56,12 +56,12 @@ export const messageFn = (
 ) => {
   if (content === undefined) {
     content = type
-    title = 'success'
+    type = 'success'
   }
   if (typeof content === 'function') {
     fn = content
     content = type
-    title = 'success'
+    type = 'success'
   }
   let params = {
     content: content,

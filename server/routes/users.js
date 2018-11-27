@@ -8,7 +8,9 @@ const router = Router()
 // 用户列表
 router
   .get('/api/users/:id', async (ctx, next) => {
-    await userController.getUserInfo(ctx)
+    let values = Mock.mock(M_Users)
+    values.user_id = ctx.params.id
+    await userController.addUser(ctx, values)
   })
   .get('/api/getUsers', async (ctx, next) => {
     await userController.getUsers(ctx)

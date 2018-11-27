@@ -219,7 +219,7 @@ export default {
           success: res => {
             vm.tableParams.data = res.data.data.rows
             vm.tableParams.loading = false
-            vm.tableParams.total = res.data.data.count
+            vm.pageParams.total = res.data.data.count
           },
           error: res => {
             vm.utils.errorFn(res.data.message, () => {
@@ -237,7 +237,7 @@ export default {
   methods: {
     fnChangeUserFreeze(value, row) {
       let vm = this
-      vm.userFreezeParams.userId = 5
+      vm.userFreezeParams.userId = row.userId
       if (value) {
         vm.userFreezeParams.userFreeze = 1
       } else {
