@@ -222,8 +222,8 @@ export default {
             vm.tableParams.loading = false
             vm.pageParams.total = res.data.data.count
           },
-          error: res => {
-            vm.utils.errorFn(res.data.message, () => {
+          error: err => {
+            vm.utils.catchErrorStatus(err.status, err.data.message, () => {
               vm.tableParams.loading = false
             })
           }
@@ -251,8 +251,8 @@ export default {
           vm.utils.messageFn(res.data.message)
           console.log('res', res)
         },
-        error: res => {
-          vm.utils.errorFn(res.data.message, () => {})
+        error: err => {
+          vm.utils.errorFn(err.data.message, () => {})
         }
       })
     },

@@ -117,8 +117,8 @@ export default {
             success: res => {
               console.log('res', res)
             },
-            error: res => {
-              vm.utils.catchErrorStatus(res.status, res.data.message, () => {
+            error: err => {
+              vm.utils.catchErrorStatus(err.status, err.data.message, () => {
                 vm.fnSubmiting(false, '登录')
               })
             }
