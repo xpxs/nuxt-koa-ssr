@@ -15,7 +15,14 @@ export const reqDataMixins = {
      */
     async reqData(params) {
       let vm = this
-      let result = await commonReq(params.url, vm[params.params])
+      let result = ''
+      //把异常try catch抛出异常
+      // result = await commonReq(params.url, vm[params.params])
+      try {
+        result = await commonReq(params.url, vm[params.params])
+      } catch (err) {
+        result = err
+      }
       if (result.data.success) {
         if (params.success && typeof params.success === 'function') {
           params.success(result)
@@ -24,6 +31,16 @@ export const reqDataMixins = {
         if (params.error && typeof params.error === 'function') {
           params.error(result)
         }
+      }
+    },
+    fnSubmiting(value, text) {
+      let vm = this
+      if (value) {
+        vm.btnParams.loading = true
+        vm.btnParams.text = text
+      } else {
+        vm.btnParams.loading = false
+        vm.btnParams.text = text
       }
     }
   }

@@ -34,9 +34,9 @@
         :label-width="60">
         <FormItem 
           label="用户名" 
-          prop="username">
+          prop="userName">
           <Input 
-            v-model="loginForm.username" 
+            v-model="loginForm.userName" 
             type="text" 
             number><Icon 
               slot="prepend" 
@@ -44,18 +44,19 @@
         </FormItem>
         <FormItem 
           label="密码" 
-          prop="password">
+          prop="userPwd">
           <Input 
-            v-model="loginForm.password" 
+            v-model="loginForm.userPwd" 
             type="password"><Icon 
               slot="prepend" 
               type="md-lock"/></Input>
         </FormItem>
         <FormItem>
           <Button 
-            :disabled="submitOnce" 
+            :loading="btnParams.loading"
+            :disabled="loginForm.userPwd === '' || loginForm.userName === ''"
             type="primary" 
-            @click="fnSubmit('loginForm')">登录</Button>
+            @click="fnSubmit('loginForm')">{{ btnParams.text }}</Button>
           <Button 
             type="default" 
             style="margin-left: 8px" 
@@ -67,16 +68,18 @@
   </section>
 </template>
 <script>
+import { reqDataMixins } from '~/mixins'
 export default {
+  mixins: [reqDataMixins],
   data() {
-    const validatePassword = (rule, value, callback) => {
+    const validateUserPwd = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('*请输入密码'))
       } else {
         callback()
       }
     }
-    const validateUsername = (rule, value, callback) => {
+    const validateUserName = (rule, value, callback) => {
       if (value === '') {
         return callback(new Error('*用户名不能为空'))
       }
@@ -84,17 +87,20 @@ export default {
     }
 
     return {
-      submitOnce: false,
+      btnParams: {
+        loading: false,
+        text: '登录'
+      },
       loginForm: {
-        password: '',
-        username: ''
+        userPwd: '',
+        userName: ''
       },
       loginFormRule: {
-        password: [
-          { required: true, validator: validatePassword, trigger: 'blur' }
+        userPwd: [
+          { required: true, validator: validateUserPwd, trigger: 'blur' }
         ],
-        username: [
-          { required: true, validator: validateUsername, trigger: 'blur' }
+        userName: [
+          { required: true, validator: validateUserName, trigger: 'blur' }
         ]
       }
     }
@@ -104,11 +110,17 @@ export default {
       let vm = this
       vm.$refs[name].validate(valid => {
         if (valid) {
-          vm.submitOnce = true
-          vm.$Message.success({
-            content: '表单验证成功',
-            onClose: function() {
-              vm.submitOnce = false
+          vm.fnSubmiting(true, '登录中')
+          vm.reqData({
+            url: 'adminLogin',
+            params: 'loginForm',
+            success: res => {
+              console.log('res', res)
+            },
+            error: res => {
+              vm.utils.catchErrorStatus(res.status, res.data.message, () => {
+                vm.fnSubmiting(false, '登录')
+              })
             }
           })
         } else {
@@ -116,7 +128,7 @@ export default {
           vm.$Message.error({
             content: '表单验证失败',
             onClose: function() {
-              vm.submitOnce = false
+              vm.fnSubmiting(false, '登录')
             }
           })
         }

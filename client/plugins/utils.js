@@ -111,6 +111,31 @@ export const errorFn = (
     onOk: fn
   })
 }
+/**
+ * [根据状态封装]
+ * @Author   tanpeng
+ * @DateTime 2018-11-28
+ * @version  [v1.0]
+ * @param    {[type]}   status  [接口返回状态]
+ * @param    {[type]}   message [接口返回的错误信息]
+ * @param    {Function} fn      [点击确定回调函数]
+ * @return   {[type]}           [description]
+ */
+export const catchErrorStatus = (status, message, fn) => {
+  switch (status) {
+    case 400:
+      errorFn(message || '请求参数异常！', fn)
+      break
+    case 401:
+      errorFn(message || '密码错误或账号不存在！', fn)
+      break
+    case 403:
+      errorFn(message || '无访问权限，请联系企业管理员！', fn)
+      break
+    default:
+      errorFn(message || '无访问权限，请联系企业管理员！', fn)
+  }
+}
 
 /**
  * [请求访问封装处理]
@@ -120,30 +145,24 @@ export const errorFn = (
  * @param    {Object}   error [请求错误]
  * @return   {[type]}         [返回Promise.reject]
  */
-export const catchError = (error = {}) => {
+export const catchError = error => {
   if (error.response) {
-    switch (error.response.status) {
-      case 400:
-        errorFn(error.response.data.message || '请求参数异常！')
-        break
-      case 401:
-        errorFn(error.response.data.message || '密码错误或账号不存在！')
-        break
-      case 403:
-        errorFn(error.response.data.message || '无访问权限，请联系企业管理员！')
-        break
-      default:
-        errorFn(error.response.data.message || '无访问权限，请联系企业管理员！')
-      // Vue.prototype.$Modal.error({
-      //   title: '错误提示',
-      //   content: error.response.data.message || '服务端异常，请联系技术支持',
-      //   onOk: () => {
-      //     return false
-      //   }
-      // })
-    }
+    catchErrorStatus(error.response.status, error.response.data.message)
+    // switch (error.response.status) {
+    //   case 400:
+    //     errorFn(error.response.data.message || '请求参数异常！')
+    //     break
+    //   case 401:
+    //     errorFn(error.response.data.message || '密码错误或账号不存在！')
+    //     break
+    //   case 403:
+    //     errorFn(error.response.data.message || '无访问权限，请联系企业管理员！')
+    //     break
+    //   default:
+    //     errorFn(error.response.data.message || '无访问权限，请联系企业管理员！')
+    // }
   }
-  return Promise.reject(error)
+  return Promise.reject(error.response)
 }
 
 /**
@@ -552,6 +571,7 @@ const utils = {
       localStorageRemoveItem: localStorageRemoveItem,
       session: session,
       errorFn: errorFn,
+      catchErrorStatus: catchErrorStatus,
       catchError: catchError,
       addUnit: addUnit,
       firstUpperCase: firstUpperCase,

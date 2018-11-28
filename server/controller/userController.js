@@ -1,4 +1,6 @@
 'use strict'
+import JWT from 'koa-jwt'
+import bcrypt from 'bcryptjs'
 import * as userModel from '../model/userModel' // 引入userModel
 import { UserData, ResDataTpl } from '../common/utils' // user的Class类
 
@@ -76,7 +78,6 @@ export async function addUser(ctx, values) {
 export async function updateUser(ctx) {
   let reqParams = ctx.request.body
   let resDataTpl = new ResDataTpl().data()
-  console.log('resDataTpl',resDataTpl)
   let values = {}
   for (let key in reqParams) {
     //驼峰参数换成下划线
@@ -96,7 +97,7 @@ export async function updateUser(ctx) {
 
 export async function postUserAuth(ctx) {
   const data = ctx.request.body // post过来的数据存在request.body里
-  const userInfo = await userModel.getUserByName(data.username) // 数据库返回的数据
+  const userInfo = await userModel.getUserByName(data.userName) // 数据库返回的数据
   let resDataTpl = new ResDataTpl().data()
   if (!userInfo) {
     resDataTpl.success = false
@@ -104,7 +105,7 @@ export async function postUserAuth(ctx) {
     ctx.body = resDataTpl
     return
   }
-  if (!bcrypt.compareSync(data.password, userInfo.password)) {
+  if (!bcrypt.compareSync(data.userPwd, userInfo.user_pwd)) {
     resDataTpl.success = false
     resDataTpl.message = '密码错误'
     ctx.body = resDataTpl
@@ -112,8 +113,8 @@ export async function postUserAuth(ctx) {
   }
   const userToken = {
     iss: config.userToken.iss,
-    name: userInfo.username,
-    id: userInfo.id
+    name: userInfo.user_name,
+    id: userInfo.user_id
   }
   const secret = serverConfig.jwtSecret // 指定密钥，这是之后用来判断token合法性的标志
   const token = JWT.sign(userToken, secret) // 签发token

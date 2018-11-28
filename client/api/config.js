@@ -11,5 +11,9 @@ export const ApiConfig = {
   updateUser: {
     url: '/api/updateUser',
     type: 'post'
+  },
+  adminLogin: {
+    url: '/api/adminLogin',
+    type: 'post'
   }
 }

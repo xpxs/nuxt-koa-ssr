@@ -30,10 +30,10 @@ export async function getUserById(id) {
  * @param    {[type]}   username [按照查找的用户名]
  * @return   {[type]}            [description]
  */
-export async function getUserByName(username) {
+export async function getUserByName(userName) {
   return await User.findOne({
     where: {
-      user_name: username,
+      user_name: userName,
       unable: '1'
     }
   })
