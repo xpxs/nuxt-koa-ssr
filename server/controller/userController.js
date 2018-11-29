@@ -5,8 +5,8 @@ import * as userModel from '../model/userModel' // 引入userModel
 import { UserData, ResDataTpl } from '../common/utils' // user的Class类
 
 export async function getUsers(ctx) {
-  const pageSize = ctx.quer.pageSize ? ctx.query.pageSize * 1 : 10
-  const pageNum = ctx.quer.pageNum ? ctx.query.pageNum * 1 : 1
+  const pageSize = ctx.query.pageSize ? ctx.query.pageSize * 1 : 10
+  const pageNum = ctx.query.pageNum ? ctx.query.pageNum * 1 : 1
   let resDataTpl = new ResDataTpl().data()
   if (isNaN(pageSize) || isNaN(pageNum)) {
     resDataTpl.success = false

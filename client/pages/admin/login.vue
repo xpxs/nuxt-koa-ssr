@@ -110,7 +110,7 @@ export default {
       let vm = this
       vm.$refs[name].validate(valid => {
         if (valid) {
-          vm.fnSubmiting(true, '登录中')
+          vm.fnSubmiting(true, '登录中...')
           vm.reqData({
             url: 'adminLogin',
             params: 'loginForm',
