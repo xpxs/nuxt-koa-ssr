@@ -4,6 +4,7 @@ const API = WEBSITE.api
 const BASE_API = WEBSITE.baseApi
 const SESS_KEY = WEBSITE.name + ':sess'
 const COOKIE_JWT = WEBSITE.name + '_jwt'
+const SECRET_JWT = WEBSITE.secretJwt
 const SHOW_EXAMPLES = true
 const AXIOS_DEFAULT_TIMEOUT = WEBSITE.timeout
 const HOST = process.env.HOST || '127.0.0.1'
@@ -22,6 +23,7 @@ export const CONFIG_API = {
   BASE_API: BASE_API,
   SESS_KEY: SESS_KEY,
   COOKIE_JWT: COOKIE_JWT,
+  SECRET_JWT: SECRET_JWT,
   SHOW_EXAMPLES: SHOW_EXAMPLES,
   AXIOS_DEFAULT_TIMEOUT: AXIOS_DEFAULT_TIMEOUT,
   HOST: HOST,

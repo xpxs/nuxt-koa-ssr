@@ -205,9 +205,9 @@ export default {
       vm.$store.dispatch('setActiveIndex', path)
       vm.$router.push({ path: path })
       if (
-        vm._.findIndex(vm.$store.state.tabs, tab) < 1 &&
         path !== '/admin' &&
-        name !== '首页'
+        name !== '首页' &&
+        vm._.findIndex(vm.$store.state.tabs, tab) < 0
       ) {
         vm.$store.dispatch('addTab', tab)
       }

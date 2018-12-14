@@ -34,8 +34,8 @@ export default {
   methods: {
     handleTabRemove(data) {
       let vm = this
-      let tabs = vm.$store.state.tabs
-      let path = tabs[tabs.length - 1].path
+      let index = vm._.findIndex(vm.$store.state.tabs, { path: data })
+      let path = vm.$store.state.tabs[index - 1].path
       vm.$router.push({ path: path })
       vm.$store.dispatch('setActiveIndex', path)
       vm.$store.dispatch('removeTab', data)

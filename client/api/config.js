@@ -1,19 +1,21 @@
 'use strict'
+const ENDPOINT_BACKEND_AUTH = '/oauth/token'
+const ENDPOINT_BACKEND_VALIDATE = '/oauth/validate'
 export const ApiConfig = {
   getMsg: {
-    url: '/api/getMsg',
+    url: ENDPOINT_BACKEND_AUTH + '/getMsg',
     type: 'get'
   },
   getUsers: {
-    url: '/api/getUsers',
+    url: ENDPOINT_BACKEND_AUTH + '/getUsers',
     type: 'get'
   },
   updateUser: {
-    url: '/api/updateUser',
+    url: ENDPOINT_BACKEND_AUTH + '/updateUser',
     type: 'post'
   },
   adminLogin: {
-    url: '/api/adminLogin',
+    url: ENDPOINT_BACKEND_VALIDATE + '/adminLogin',
     type: 'post'
   }
 }

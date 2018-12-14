@@ -17,9 +17,11 @@ export const mutations = {
   },
   //删除tab
   REMOVE_TAB(state, tab) {
-    vue.prototype._.remove(state.tabs, function(n) {
+    let tabs = vue.prototype.utils.session('a-leftMenus')
+    vue.prototype._.remove(tabs, function(n) {
       return n.path === tab
     })
+    state.tabs = tabs
     vue.prototype.utils.session('a-leftMenus', state.tabs)
   },
   //清空tab

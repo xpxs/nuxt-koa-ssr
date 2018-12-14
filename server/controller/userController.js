@@ -1,8 +1,10 @@
 'use strict'
 import JWT from 'koa-jwt'
 import bcrypt from 'bcryptjs'
+import Moment from 'moment'
 import * as userModel from '../model/userModel' // 引入userModel
 import { UserData, ResDataTpl } from '../common/utils' // user的Class类
+import { CONFIG_API } from '../config/CONFIG_API'
 
 export async function getUsers(ctx) {
   const pageSize = ctx.query.pageSize ? ctx.query.pageSize * 1 : 10
@@ -111,13 +113,16 @@ export async function postUserAuth(ctx) {
     ctx.body = resDataTpl
     return
   }
+  let loginTime = Moment()
   const userToken = {
-    iss: config.userToken.iss,
+    iss: CONFIG_API.SECRET_JWT,
     name: userInfo.user_name,
+    exp: loginTime + 10 * 60 * 1000, //过期时间10分钟
+    iat: loginTime, //登录时间
     id: userInfo.user_id
   }
-  const secret = serverConfig.jwtSecret // 指定密钥，这是之后用来判断token合法性的标志
-  const token = JWT.sign(userToken, secret) // 签发token
+  const secret = CONFIG_API.SECRET_JWT // 指定密钥，这是之后用来判断token合法性的标志
+  const token = JWT.sign(userToken, secret, 10 * 60) // 签发token
   resDataTpl.success = true
   resDataTpl.message = '登录成功'
   resDataTpl.data = token

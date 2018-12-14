@@ -148,19 +148,6 @@ export const catchErrorStatus = (status, message, fn) => {
 export const catchError = error => {
   if (error.response) {
     catchErrorStatus(error.response.status, error.response.data.message)
-    // switch (error.response.status) {
-    //   case 400:
-    //     errorFn(error.response.data.message || '请求参数异常！')
-    //     break
-    //   case 401:
-    //     errorFn(error.response.data.message || '密码错误或账号不存在！')
-    //     break
-    //   case 403:
-    //     errorFn(error.response.data.message || '无访问权限，请联系企业管理员！')
-    //     break
-    //   default:
-    //     errorFn(error.response.data.message || '无访问权限，请联系企业管理员！')
-    // }
   }
   return Promise.reject(error.response)
 }

@@ -8,5 +8,6 @@ export const WEBSITE = {
   api: api,
   baseApi: '/' + api,
   timeout: timeout,
-  version: version
+  version: version,
+  secretJwt: '6F8EC8A5-FF59-470F-8758-61DC18DB40CF'
 }
