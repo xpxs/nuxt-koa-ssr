@@ -1,6 +1,7 @@
 import vue from 'vue'
 export const state = () => ({
   tabs: [],
+  token: '',
   activeIndex: '/admin'
 })
 export const mutations = {
@@ -31,6 +32,15 @@ export const mutations = {
   },
   SET_ACTIVE_INDEX(state, index) {
     state.activeIndex = index
+  },
+  SET_TOKEN(state) {
+    let token = vue.prototype.utils.session('token')
+    state.token = token
+  },
+  LOGOUT(state) {
+    vue.prototype.utils.localStorageRemoveItem()
+    state.tabs = []
+    state.token = ''
   }
 }
 export const getters = {}
@@ -50,5 +60,11 @@ export const actions = {
   },
   setActiveIndex({ commit }, index) {
     commit('SET_ACTIVE_INDEX', index)
+  },
+  setToken({ commit }) {
+    commit('SET_TOKEN')
+  },
+  logout({ commit }) {
+    commit('LOGOUT')
   }
 }

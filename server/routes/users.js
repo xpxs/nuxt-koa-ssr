@@ -15,6 +15,7 @@ router
   })
   //获得用户列表
   .get(CONFIG_API.ENDPOINT_BACKEND_AUTH + '/getUsers', async (ctx, next) => {
+    console.log('ctx', ctx)
     await userController.getUsers(ctx)
   })
   //更新数据
@@ -22,11 +23,8 @@ router
     await userController.updateUser(ctx)
   })
   //后台管理登录
-  .post(
-    CONFIG_API.ENDPOINT_BACKEND_VALIDATE + '/adminLogin',
-    async (ctx, next) => {
-      await userController.postUserAuth(ctx)
-    }
-  )
-
+  .post(CONFIG_API.ENDPOINT_BACKEND_AUTH + '/adminLogin', async (ctx, next) => {
+    await userController.postUserAuth(ctx)
+  })
+  
 export default router

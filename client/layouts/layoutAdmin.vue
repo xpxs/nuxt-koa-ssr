@@ -11,7 +11,7 @@
           <nuxt-link 
             to="/" 
             class="on"><Icon type="ios-globe" /> 网站管理</nuxt-link>
-          <nuxt-link to="/"><Icon type="ios-flower" /> 公众号管理</nuxt-link>
+          <nuxt-link to="/admin/login"><Icon type="ios-flower" /> 公众号管理</nuxt-link>
         </div>
         <div class="right-nav">
           <Button 

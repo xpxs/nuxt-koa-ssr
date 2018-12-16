@@ -127,7 +127,7 @@ export const catchErrorStatus = (status, message, fn) => {
       errorFn(message || '请求参数异常！', fn)
       break
     case 401:
-      errorFn(message || '密码错误或账号不存在！', fn)
+      errorFn(message || '无访问权限，请联系企业管理员！', fn)
       break
     case 403:
       errorFn(message || '无访问权限，请联系企业管理员！', fn)

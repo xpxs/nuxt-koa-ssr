@@ -1,35 +1,55 @@
 'use strict'
-import JWT from 'koa-jwt'
+import JWT from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import Moment from 'moment'
 import * as userModel from '../model/userModel' // 引入userModel
 import { UserData, ResDataTpl } from '../common/utils' // user的Class类
 import { CONFIG_API } from '../config/CONFIG_API'
-
+/* 通过token获取JWT的userToken */
+const getJWTUserToken = async (token, fn) => {
+  // 验证并解析JWT
+  await JWT.verify(token.split(' ')[1], CONFIG_API.SECRET_JWT, fn)
+}
 export async function getUsers(ctx) {
-  const pageSize = ctx.query.pageSize ? ctx.query.pageSize * 1 : 10
-  const pageNum = ctx.query.pageNum ? ctx.query.pageNum * 1 : 1
   let resDataTpl = new ResDataTpl().data()
-  if (isNaN(pageSize) || isNaN(pageNum)) {
-    resDataTpl.success = false
-    resDataTpl.message = '参数不正确'
-    resDataTpl.data = null
-    ctx.body = resDataTpl
-    return
-  }
-  const users = await userModel.getUsersCount(pageNum, pageSize)
-  let userData = new UserData(users)
-  if (users) {
-    resDataTpl.success = true
-    resDataTpl.message = '查询成功'
-    resDataTpl.data = userData.list()
-    ctx.body = resDataTpl
-  } else {
-    resDataTpl.success = false
-    resDataTpl.message = '没有符合要求的用户'
-    resDataTpl.data = null
-    ctx.body = resDataTpl
-  }
+  await getJWTUserToken(ctx.headers.authorization, async function(
+    err,
+    decoded
+  ) {
+    if (decoded) {
+      let time = Moment().valueOf()
+      if (time > decoded.exp) {
+        resDataTpl.success = false
+        resDataTpl.message = 'token已过期，请重新登录'
+        resDataTpl.data = null
+        ctx.body = resDataTpl
+        ctx.status = 401
+      } else {
+        const pageSize = ctx.query.pageSize ? ctx.query.pageSize * 1 : 10
+        const pageNum = ctx.query.pageNum ? ctx.query.pageNum * 1 : 1
+        if (isNaN(pageSize) || isNaN(pageNum)) {
+          resDataTpl.success = false
+          resDataTpl.message = '参数不正确'
+          resDataTpl.data = null
+          ctx.body = resDataTpl
+          return
+        }
+        const users = await userModel.getUsersCount(pageNum, pageSize)
+        let userData = new UserData(users)
+        if (users) {
+          resDataTpl.success = true
+          resDataTpl.message = '查询成功'
+          resDataTpl.data = userData.list()
+          ctx.body = resDataTpl
+        } else {
+          resDataTpl.success = false
+          resDataTpl.message = '没有符合要求的用户'
+          resDataTpl.data = null
+          ctx.body = resDataTpl
+        }
+      }
+    }
+  })
 }
 
 /**
@@ -66,6 +86,8 @@ export async function getUserInfo(ctx) {
  */
 export async function addUser(ctx, values) {
   let resDataTpl = new ResDataTpl().data()
+  values.user_name = 'admin'
+  values.user_pwd = bcrypt.hashSync('admin', 8)
   let data = await userModel.addUser(values)
   if (data) {
     resDataTpl.message = '新增更新成功'
@@ -113,16 +135,15 @@ export async function postUserAuth(ctx) {
     ctx.body = resDataTpl
     return
   }
-  let loginTime = Moment()
+  let loginTime = Moment().valueOf()
   const userToken = {
-    iss: CONFIG_API.SECRET_JWT,
+    id: userInfo.user_id,
     name: userInfo.user_name,
-    exp: loginTime + 10 * 60 * 1000, //过期时间10分钟
-    iat: loginTime, //登录时间
-    id: userInfo.user_id
+    exp: loginTime + 5 * 1000, //过期时间10分钟
+    iat: loginTime //登录时间
   }
   const secret = CONFIG_API.SECRET_JWT // 指定密钥，这是之后用来判断token合法性的标志
-  const token = JWT.sign(userToken, secret, 10 * 60) // 签发token
+  const token = JWT.sign(userToken, secret) // 签发token
   resDataTpl.success = true
   resDataTpl.message = '登录成功'
   resDataTpl.data = token

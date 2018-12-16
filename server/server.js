@@ -18,6 +18,11 @@ async function start() {
   const port = CONFIG_API.PORT || 3000
 
   // routes
+  app.use(
+    jwt({ secret: CONFIG_API.SECRET_JWT }).unless({
+      path: [/^\/oauth\/adminLogin/, /^((?!\/oauth).)*$/] // 设置除了私有接口外的其它资源，可以不需要认证访问]
+    })
+  )
   app.use(bodyParser())
   app.use(convert(cors()))
   app.use(routes.routes(), routes.allowedMethods())

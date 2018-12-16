@@ -71,6 +71,9 @@
 import { reqDataMixins } from '~/mixins'
 export default {
   mixins: [reqDataMixins],
+  fetch({ store, params }) {
+    console.log('store.state', store.state)
+  },
   data() {
     const validateUserPwd = (rule, value, callback) => {
       if (value === '') {
@@ -115,7 +118,14 @@ export default {
             url: 'adminLogin',
             params: 'loginForm',
             success: res => {
-              console.log('res', res)
+              if (res.data.success) {
+                vm.utils.messageFn(res.data.message)
+                vm.utils.session('a-token', res.data.data)
+                vm.$router.push({ path: '/admin' })
+                vm.$store.dispatch('setToken')
+              } else {
+                vm.utils.errorFn(res.data.message)
+              }
             },
             error: err => {
               vm.utils.catchErrorStatus(err.status, err.data.message, () => {
@@ -136,6 +146,7 @@ export default {
     },
     fnReset(name) {
       this.$refs[name].resetFields()
+      this.fnSubmiting(false, '登录')
     }
   }
 }

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { catchError } from '@/plugins/utils'
+import { catchError, session } from '@/plugins/utils'
 import { BASE } from './URL'
 // 定义fetch函数，config为配置
 export const fetch = config => {
@@ -16,6 +16,20 @@ export const fetch = config => {
       // 定义请求根目录
       baseURL: BASE.URL
     })
+    instance.interceptors.request.use(
+      config => {
+        let token = session('a-token')
+        config.headers = {}
+        if (token) {
+          // 判断是否存在token，如果存在的话，则每个http header都加上token
+          config.headers.authorization = `Bearer ${token}`
+        }
+        return config
+      },
+      err => {
+        return Promise.reject(err)
+      }
+    )
     // 错误处理
     instance.interceptors.response.use(response => {
       return response
@@ -35,11 +49,17 @@ export const fetch = config => {
 }
 
 // 封装调用的接口 getData
-export const getData = (url = '/api/data', type = 'post', data = {}) => {
+export const getData = (
+  url = '/api/data',
+  type = 'post',
+  data = {},
+  headers
+) => {
   return fetch({
     // 这里的url为baseURL下接口地址，如baseURL为'www.baidu.com',接口地址为'www.baidu.com/api/getdata',那么url里就写'api/getdata'
     url: url,
     method: type,
-    data: data
+    data: data,
+    headers: headers
   })
 }

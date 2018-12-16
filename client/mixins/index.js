@@ -29,6 +29,10 @@ export const reqDataMixins = {
         }
       } else {
         if (params.error && typeof params.error === 'function') {
+          if (result.status === 401) {
+            vm.$store.dispatch('logout')
+            vm.$router.push({ path: '/admin/login' })
+          }
           params.error(result)
         }
       }
