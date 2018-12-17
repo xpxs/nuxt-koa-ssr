@@ -34,7 +34,7 @@ export const mutations = {
     state.activeIndex = index
   },
   SET_TOKEN(state) {
-    let token = vue.prototype.utils.session('token')
+    let token = vue.prototype.utils.session('a-token')
     state.token = token
   },
   LOGOUT(state) {

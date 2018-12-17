@@ -8,8 +8,8 @@ export const reqDataMixins = {
      * @DateTime 2018-11-26
      * @version  [v1.0]
      * @param    {[type]}   params [params.url:接口请求定义名称,
-     *                              params.params:接口请求参数],
-     *                              params.success:接口请求数据成功返回函数],
+     *                              params.params:接口请求参数,
+     *                              params.success:接口请求数据成功返回函数,
      *                              params.error:接口未请求到数据返回函数],
      * @return   {[type]}          [description]
      */
@@ -23,16 +23,19 @@ export const reqDataMixins = {
       } catch (err) {
         result = err
       }
+      if (result.status === 401) {
+        vm.utils.catchErrorStatus(result.status, result.data.message, () => {
+          vm.$store.dispatch('logout')
+          vm.$router.push('/admin/login')
+        })
+        return
+      }
       if (result.data.success) {
         if (params.success && typeof params.success === 'function') {
           params.success(result)
         }
       } else {
         if (params.error && typeof params.error === 'function') {
-          if (result.status === 401) {
-            vm.$store.dispatch('logout')
-            vm.$router.push({ path: '/admin/login' })
-          }
           params.error(result)
         }
       }

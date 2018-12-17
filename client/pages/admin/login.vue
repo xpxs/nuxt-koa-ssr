@@ -120,7 +120,7 @@ export default {
             success: res => {
               if (res.data.success) {
                 vm.utils.messageFn(res.data.message)
-                vm.utils.session('a-token', res.data.data)
+                // vm.utils.session('a-token', res.data.data)
                 vm.$router.push({ path: '/admin' })
                 vm.$store.dispatch('setToken')
               } else {

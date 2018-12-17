@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { catchError, session } from '@/plugins/utils'
 import { BASE } from './URL'
+import Moment from 'moment'
 // 定义fetch函数，config为配置
 export const fetch = config => {
   // 返回promise对象
@@ -20,6 +21,7 @@ export const fetch = config => {
       config => {
         let token = session('a-token')
         config.headers = {}
+        config.headers['Request-Time'] = Moment().valueOf()
         if (token) {
           // 判断是否存在token，如果存在的话，则每个http header都加上token
           config.headers.authorization = `Bearer ${token}`
@@ -32,6 +34,11 @@ export const fetch = config => {
     )
     // 错误处理
     instance.interceptors.response.use(response => {
+      //返回拦截获取token
+      let token = response.headers.token
+      if (token) {
+        session('a-token', token)
+      }
       return response
     }, catchError)
     // 请求成功后执行的函数
