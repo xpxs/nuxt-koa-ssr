@@ -2,6 +2,7 @@
 import JWT from 'jsonwebtoken'
 import Moment from 'moment'
 import { CONFIG_API } from '../config/CONFIG_API'
+import Redis from 'ioredis'
 export class UserData {
   // 构造
   constructor(data) {
@@ -52,6 +53,27 @@ export class ResDataTpl {
     }
   }
 }
+//redis
+export class RedisToken {
+  // 构造
+  constructor() {
+    this.redis = new Redis({
+      host: CONFIG_API.HOST, //安装好的redis服务器地址
+      port: CONFIG_API.REDIS_PORT, //端口
+      prefix: CONFIG_API.REDIS_KEY, //存诸前缀
+      ttl: 60 * 60 * 23, //过期时间
+      db: 0
+    })
+  }
+  set(key, value) {
+    //存储数据到redis
+    this.redis.set(key, value)
+  }
+  async get(key) {
+    let data = await this.redis.get(key)
+    return data
+  }
+}
 
 export class CreateToken {
   // 构造
@@ -63,14 +85,14 @@ export class CreateToken {
     const payload = {
       id: this.data.user_id,
       name: this.data.user_name,
-      exp: loginTime + 6 * 1000, //过期时间10分钟
+      exp: loginTime + 10 * 60 * 1000, //过期时间10分钟
       iat: loginTime //登录时间
     }
     const token = JWT.sign(payload, CONFIG_API.SECRET_JWT) // 签发token
+    new RedisToken().set(this.data.user_id, token)
     return token
   }
 }
-
 export class VeriftyToken {
   // 构造
   constructor(data) {
@@ -92,7 +114,7 @@ export class VeriftyToken {
         self.data.status = 500
         return false
       }
-      if (userToken.exp - time < 50 * 1000) {
+      if (userToken.exp - time < 5 * 60 * 1000) {
         //5分钟后更新token
         let token = new CreateToken({
           user_id: userToken.id,
@@ -109,27 +131,25 @@ export class VeriftyToken {
     self.data.status = 500
     return false
   }
-  getJWTUserToken() {
+  async getJWTUserToken() {
     const self = this
     let token = self.data.headers.authorization
     let time = Moment().valueOf()
-    try {
-      let decoded = JWT.verify(token.split(' ')[1], CONFIG_API.SECRET_JWT)
-      if (time > decoded.exp) {
-        self.resDataTpl.success = false
-        self.resDataTpl.message = 'token已过期，请重新登录'
-        self.resDataTpl.data = null
-        self.data.body = self.resDataTpl
-        self.data.status = 401
-        return false
-      }
-      let flag = self.reqOverTime(decoded)
-      if (flag) {
-        return true
-      }
-      return false
-    } catch (err) {
+    let splitToken = token.split(' ')[1]
+    let decoded = await JWT.verify(splitToken, CONFIG_API.SECRET_JWT)
+    let doc = await new RedisToken().get(decoded.id)
+    if (time > decoded.exp || doc === null || doc !== splitToken) {
+      self.resDataTpl.success = false
+      self.resDataTpl.message = 'token已过期，请重新登录'
+      self.resDataTpl.data = null
+      self.data.body = self.resDataTpl
+      self.data.status = 401
       return false
     }
+    let flag = self.reqOverTime(decoded)
+    if (flag) {
+      return true
+    }
+    return false
   }
 }

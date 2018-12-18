@@ -17,8 +17,7 @@ router
   })
   //获得用户列表
   .get(CONFIG_API.ENDPOINT_BACKEND_AUTH + '/getUsers', async (ctx, next) => {
-    let flag = new VeriftyToken(ctx).getJWTUserToken()
-    console.log('flag1111', flag)
+    let flag = await new VeriftyToken(ctx).getJWTUserToken()
     if (flag) {
       await userController.getUsers(ctx)
     }
