@@ -98,14 +98,15 @@ export class VeriftyToken {
   constructor(data) {
     this.data = data
     this.resDataTpl = new ResDataTpl().data()
+    this.time = Moment().valueOf()
+    this.reqTime = data.headers['request-time']
+    this.token = data.headers.authorization
   }
   reqOverTime(userToken) {
     const self = this
-    let time = Moment().valueOf()
-    let reqTime = self.data.headers['request-time']
-    if (time > reqTime) {
+    if (self.time > self.reqTime) {
       //判断接口请求时间与当前时间
-      if (time - reqTime > 10 * 1000) {
+      if (self.time - self.reqTime > 10 * 1000) {
         //请求超过10秒报错
         self.resDataTpl.success = false
         self.resDataTpl.message = '请求超时！'
@@ -114,7 +115,7 @@ export class VeriftyToken {
         self.data.status = 500
         return false
       }
-      if (userToken.exp - time < 5 * 60 * 1000) {
+      if (userToken.exp - self.time < 5 * 60 * 1000) {
         //5分钟后更新token
         let token = new CreateToken({
           user_id: userToken.id,
@@ -133,12 +134,23 @@ export class VeriftyToken {
   }
   async getJWTUserToken() {
     const self = this
-    let token = self.data.headers.authorization
-    let time = Moment().valueOf()
-    let splitToken = token.split(' ')[1]
+    let splitToken = self.token.split(' ')[1]
     let decoded = await JWT.verify(splitToken, CONFIG_API.SECRET_JWT)
     let doc = await new RedisToken().get(decoded.id)
-    if (time > decoded.exp || doc === null || doc !== splitToken) {
+    let reqTimeKey = decoded.id + ' reqTime'
+    let reqTimeData = await new RedisToken().get(reqTimeKey)
+    //拦截判断接口请求频次
+    if (reqTimeData && self.time - reqTimeData < 1000) {
+      self.resDataTpl.success = false
+      self.resDataTpl.message = '系统繁忙！您接口请求太频繁！'
+      self.resDataTpl.data = null
+      self.data.body = self.resDataTpl
+      self.data.status = 502
+      return false
+    }
+    //增加接口请求频次标记
+    new RedisToken().set(reqTimeKey, self.time)
+    if (self.time > decoded.exp || doc === null || doc !== splitToken) {
       self.resDataTpl.success = false
       self.resDataTpl.message = 'token已过期，请重新登录'
       self.resDataTpl.data = null

@@ -2,7 +2,7 @@
 const oauth = '/oauth'
 export const ApiConfig = {
   getMsg: {
-    url: oauth + '/getMsg',
+    url: '/getMsg',
     type: 'get'
   },
   getUsers: {
