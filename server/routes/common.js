@@ -5,6 +5,7 @@ const router = Router()
 
 // 用户列表
 router.get('/getMsg', async (ctx, next) => {
+  console.log('ctx.request.ip', ctx.request.ip)
   let resDataTpl = new ResDataTpl().data()
   resDataTpl.success = true
   resDataTpl.message = '发送验证码成功'
