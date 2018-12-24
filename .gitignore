@@ -15,3 +15,6 @@ server/logs
 
 # build
 build
+
+# uploads
+client/static/uploads

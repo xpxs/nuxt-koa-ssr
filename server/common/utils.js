@@ -1,6 +1,7 @@
 'use strict'
 import JWT from 'jsonwebtoken'
 import Moment from 'moment'
+import multer from 'koa-multer'
 import { CONFIG_API } from '../config/CONFIG_API'
 import Redis from 'ioredis'
 export class UserData {
@@ -163,5 +164,26 @@ export class VeriftyToken {
       return true
     }
     return false
+  }
+}
+
+export class Upload {
+  constructor() {
+    this.filePath = 'client/static/uploads/' + Moment().format('YYYYMMDD')
+    this.storage = multer.diskStorage({
+      destination: this.filePath,
+      filename: function(req, file, cb) {
+        let fileFormat = file.originalname.split('.')
+        let fileName =
+          Moment().valueOf() + '.' + fileFormat[fileFormat.length - 1]
+        cb(null, fileName)
+      }
+    })
+  }
+  path() {
+    return this.filePath
+  }
+  upload() {
+    return multer({ storage: this.storage })
   }
 }
