@@ -73,6 +73,12 @@ export default {
       collapsed: true
     }
   },
+  created() {
+    if (process.client) {
+      let vm = this
+      vm.utils.diffTimesClearLocalStorage(vm.$store, 'a-loginRetentionTime')
+    }
+  },
   mounted() {
     let vm = this
     //获得当前路由

@@ -74,6 +74,7 @@
     "jsonwebtoken": "8.4.0",
     "koa-multer": "^1.0.2",
     "mysql2": "1.6.1",
+    "node-jvm": "^0.2.3",
     "nodemon": "1.11.0",
     "prettier": "1.14.3",
     "scmp": "2.0.0",

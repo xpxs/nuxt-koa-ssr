@@ -1,10 +1,43 @@
 import Router from 'koa-router'
 import Mock from 'mockjs'
 import JWT from 'jsonwebtoken'
+import { exec } from 'child_process'
 import { M_Users } from '../mock'
 import { CONFIG_API } from '../config/CONFIG_API'
 import { VeriftyToken, Upload } from '../common/utils'
 import * as userController from '../controller/userController' // 引入userController
+
+function parserequest(urls, ctx) {
+  var exec_path =
+    'python ./skinAnalyse.py ' +
+    'D:/tanpeng/nuxt-koa-ssr/client/static/uploads/20181226/face0.jpg' +
+    ' ' +
+    'D:/tanpeng/nuxt-koa-ssr/client/static/uploads/20181226/face1.jpg' +
+    ' ' +
+    'D:/tanpeng/nuxt-koa-ssr/client/static/uploads/20181226/face2.jpg' +
+    ' ' +
+    'D:/tanpeng/nuxt-koa-ssr/client/static/uploads/20181226/face3.jpg' +
+    ' ' +
+    'D:/tanpeng/nuxt-koa-ssr/client/static/uploads/20181226/face4.jpg' +
+    ' ' +
+    'D:/tanpeng/nuxt-koa-ssr/client/static/uploads/20181224/'
+  var data = ''
+  exec(exec_path, function(error, stdout, stderr) {
+    console.log('error', error)
+    console.log('stdout', stdout)
+    console.log('stderr', stderr)
+    if (stdout.length > 1) {
+      data = `{errcode:0,errmsg:'${stdout}'}`
+    } else {
+      data = `{errcode:0,errmsg:'${stdout}'}`
+    }
+    ctx.body = { data: JSON.stringify(data) }
+    if (error) {
+      data = `{errcode:500,errmsg:'${error}'}`
+      ctx.body = { data: JSON.stringify(data) }
+    }
+  })
+}
 
 //加载配置
 let upload = new Upload().upload()
@@ -39,6 +72,8 @@ router
   })
   //后台管理登录
   .post(CONFIG_API.ENDPOINT_BACKEND_AUTH + '/adminLogin', async (ctx, next) => {
+    console.log('333333333333s')
+    parserequest('../../client/static/uploads/20181226/face0.jpg', ctx)
     await userController.postUserAuth(ctx)
   })
   //后台管理上传图片

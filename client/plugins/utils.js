@@ -1,9 +1,10 @@
 'use strict'
 import Vue from 'vue'
+import Moment from 'moment'
 import { getData } from '@/api/axios.js'
 
 export const localStorageRemoveItem = keys => {
-  keys = keys || ['a-leftMenus', 'a-token']
+  keys = keys || ['a-leftMenus', 'a-token', 'a-loginRetentionTime']
   for (var i = 0; i <= keys.length; i++) {
     if (localStorage.getItem(keys[i])) {
       localStorage.removeItem(keys[i])
@@ -508,7 +509,7 @@ export const UUID = () => {
  * @return   {[type]}         [description]
  */
 export const diffTimesClearLocalStorage = (store, sessionName) => {
-  let thisTime = new Date().getTime()
+  let thisTime = Moment().valueOf()
   let loginRetentionTime = session(sessionName)
   if (loginRetentionTime) {
     let timeDiff = thisTime - loginRetentionTime
@@ -556,6 +557,7 @@ const utils = {
   install(Vue) {
     Vue.prototype.utils = {
       localStorageRemoveItem: localStorageRemoveItem,
+      diffTimesClearLocalStorage: diffTimesClearLocalStorage,
       session: session,
       errorFn: errorFn,
       catchErrorStatus: catchErrorStatus,

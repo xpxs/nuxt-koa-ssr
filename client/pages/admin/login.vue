@@ -119,6 +119,9 @@ export default {
             params: 'loginForm',
             success: res => {
               if (res.data.success) {
+                //登录保持时间
+                let thisTime = vm.$moment().valueOf()
+                vm.utils.session('a-loginRetentionTime', thisTime)
                 vm.utils.messageFn(res.data.message)
                 // vm.utils.session('a-token', res.data.data)
                 vm.$router.push({ path: '/admin' })
