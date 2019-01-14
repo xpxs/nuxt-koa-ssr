@@ -24,6 +24,7 @@
   "dependencies": {
     "axios": "0.18.0",
     "bcryptjs": "2.4.3",
+    "bluebird": "^3.5.3",
     "cross-env": "5.0.1",
     "es6-promise": "4.2.5",
     "fs": "0.0.1-security",
@@ -43,6 +44,7 @@
     "node-sass": "4.10.0",
     "nuxt": "2.3.2",
     "path": "0.12.7",
+    "redis": "^2.8.0",
     "sass-loader": "7.1.0",
     "sequelize": "4.39.1",
     "source-map-support": "0.4.15",

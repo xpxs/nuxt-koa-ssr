@@ -3,7 +3,8 @@ import JWT from 'jsonwebtoken'
 import Moment from 'moment'
 import multer from 'koa-multer'
 import { CONFIG_API } from '../config/CONFIG_API'
-import Redis from 'ioredis'
+import Redis from 'redis'
+import Bluebird from 'bluebird'
 export class UserData {
   // 构造
   constructor(data) {
@@ -58,20 +59,31 @@ export class ResDataTpl {
 export class RedisToken {
   // 构造
   constructor() {
-    this.redis = new Redis({
-      host: CONFIG_API.HOST, //安装好的redis服务器地址
-      port: CONFIG_API.REDIS_PORT, //端口
-      prefix: CONFIG_API.REDIS_KEY, //存诸前缀
-      ttl: 60 * 60 * 23, //过期时间
-      db: 0
+    // this.redis = new Redis({
+    //   host: CONFIG_API.HOST, //安装好的redis服务器地址
+    //   port: CONFIG_API.REDIS_PORT, //端口
+    //   prefix: CONFIG_API.REDIS_KEY, //存诸前缀
+    //   ttl: 60 * 60 * 23, //过期时间
+    //   db: 0
+    // })
+    Bluebird.promisifyAll(Redis.RedisClient.prototype)
+    Bluebird.promisifyAll(Redis.Multi.prototype)
+    this.redis = Redis.createClient('6379', '127.0.0.1')
+    // redis 链接错误
+    this.redis.on('error', function(error) {
+      console.log('error', error)
     })
   }
-  set(key, value) {
+  async set(key, value) {
     //存储数据到redis
-    this.redis.set(key, value)
+    let self = this
+    let data = await self.redis.setAsync(key, value)
+    return data
   }
   async get(key) {
-    let data = await this.redis.get(key)
+    let self = this
+    let data = await self.redis.getAsync(key)
+    console.log('--------getdata-------', data)
     return data
   }
 }
@@ -81,7 +93,7 @@ export class CreateToken {
   constructor(data) {
     this.data = data
   }
-  token() {
+  async token() {
     let loginTime = Moment().valueOf()
     const payload = {
       id: this.data.user_id,
@@ -90,7 +102,9 @@ export class CreateToken {
       iat: loginTime //登录时间
     }
     const token = JWT.sign(payload, CONFIG_API.SECRET_JWT) // 签发token
-    new RedisToken().set(this.data.user_id, token)
+    console.log('this.data.user_id', this.data.user_id)
+    let data = await new RedisToken().set(this.data.user_id, token)
+    console.log('data-----', data)
     return token
   }
 }
@@ -103,7 +117,7 @@ export class VeriftyToken {
     this.reqTime = data.headers['request-time']
     this.token = data.headers.authorization
   }
-  reqOverTime(userToken) {
+  async reqOverTime(userToken) {
     const self = this
     if (self.time > self.reqTime) {
       //判断接口请求时间与当前时间
@@ -118,10 +132,11 @@ export class VeriftyToken {
       }
       if (userToken.exp - self.time < 5 * 60 * 1000) {
         //5分钟后更新token
-        let token = new CreateToken({
+        let token = await new CreateToken({
           user_id: userToken.id,
           user_name: userToken.name
         }).token()
+        //浏览器端返回token
         self.data.set('Token', token)
       }
       return true
@@ -136,10 +151,15 @@ export class VeriftyToken {
   async getJWTUserToken() {
     const self = this
     let splitToken = self.token.split(' ')[1]
+    console.log('-------splitToken---------', splitToken)
     let decoded = await JWT.verify(splitToken, CONFIG_API.SECRET_JWT)
     let doc = await new RedisToken().get(decoded.id)
+    console.log('-------decoded---------', decoded)
+    console.log('-------doc---------', doc)
     let reqTimeKey = decoded.id + ' reqTime'
+    console.log('-------reqTimeKey---------', reqTimeKey)
     let reqTimeData = await new RedisToken().get(reqTimeKey)
+    console.log('-------reqTimeData---------', reqTimeData)
     //拦截判断接口请求频次
     if (reqTimeData && self.time - reqTimeData < 1000) {
       self.resDataTpl.success = false
@@ -150,7 +170,7 @@ export class VeriftyToken {
       return false
     }
     //增加接口请求频次标记
-    new RedisToken().set(reqTimeKey, self.time)
+    let data = await new RedisToken().set(reqTimeKey, self.time)
     if (self.time > decoded.exp || doc === null || doc !== splitToken) {
       self.resDataTpl.success = false
       self.resDataTpl.message = 'token已过期，请重新登录'
@@ -159,7 +179,7 @@ export class VeriftyToken {
       self.data.status = 401
       return false
     }
-    let flag = self.reqOverTime(decoded)
+    let flag = await self.reqOverTime(decoded)
     if (flag) {
       return true
     }

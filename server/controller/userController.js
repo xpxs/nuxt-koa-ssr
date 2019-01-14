@@ -135,7 +135,7 @@ export async function postUserAuth(ctx) {
     ctx.body = resDataTpl
     return
   }
-  const token = new CreateToken({
+  const token = await new CreateToken({
     user_id: userInfo.user_id,
     user_name: userInfo.user_name
   }).token()

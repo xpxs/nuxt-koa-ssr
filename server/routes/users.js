@@ -8,24 +8,14 @@ import { VeriftyToken, Upload } from '../common/utils'
 import * as userController from '../controller/userController' // 引入userController
 
 function parserequest(urls, ctx) {
-  var exec_path =
-    'python ./skinAnalyse.py ' +
-    'D:/tanpeng/nuxt-koa-ssr/client/static/uploads/20181226/face0.jpg' +
-    ' ' +
-    'D:/tanpeng/nuxt-koa-ssr/client/static/uploads/20181226/face1.jpg' +
-    ' ' +
-    'D:/tanpeng/nuxt-koa-ssr/client/static/uploads/20181226/face2.jpg' +
-    ' ' +
-    'D:/tanpeng/nuxt-koa-ssr/client/static/uploads/20181226/face3.jpg' +
-    ' ' +
-    'D:/tanpeng/nuxt-koa-ssr/client/static/uploads/20181226/face4.jpg' +
-    ' ' +
-    'D:/tanpeng/nuxt-koa-ssr/client/static/uploads/20181224/'
-  var data = ''
+  let arg1 = 'D:/tanpeng/nuxt-koa-ssr/client/static/uploads/20181226/face0.jpg'
+  let arg2 = 'D:/tanpeng/nuxt-koa-ssr/client/static/'
+  var exec_path = 'python D:/tanpeng/nuxt-koa-ssr/server/routes/add.py '
   exec(exec_path, function(error, stdout, stderr) {
     console.log('error', error)
     console.log('stdout', stdout)
     console.log('stderr', stderr)
+    let data = ''
     if (stdout.length > 1) {
       data = `{errcode:0,errmsg:'${stdout}'}`
     } else {
@@ -37,6 +27,7 @@ function parserequest(urls, ctx) {
       ctx.body = { data: JSON.stringify(data) }
     }
   })
+  console.log('22222')
 }
 
 //加载配置
@@ -54,6 +45,7 @@ router
   })
   //获得用户列表
   .get(CONFIG_API.ENDPOINT_BACKEND_AUTH + '/getUsers', async (ctx, next) => {
+    // parserequest('../../client/static/uploads/20181226/face0.jpg', ctx)
     let flag = await new VeriftyToken(ctx).getJWTUserToken()
     if (flag) {
       await userController.getUsers(ctx)
@@ -72,8 +64,6 @@ router
   })
   //后台管理登录
   .post(CONFIG_API.ENDPOINT_BACKEND_AUTH + '/adminLogin', async (ctx, next) => {
-    console.log('333333333333s')
-    parserequest('../../client/static/uploads/20181226/face0.jpg', ctx)
     await userController.postUserAuth(ctx)
   })
   //后台管理上传图片
