@@ -3,7 +3,13 @@ import JWT from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import Moment from 'moment'
 import * as userModel from '../model/userModel' // 引入userModel
-import { UserData, ResDataTpl, CreateToken, OverTime } from '../common/utils' // user的Class类
+import {
+  UserData,
+  ResDataTpl,
+  CreateToken,
+  OverTime,
+  RedisToken
+} from '../common/utils' // user的Class类
 import { CONFIG_API } from '../config/CONFIG_API'
 /* 通过token获取JWT的userToken */
 
@@ -121,8 +127,17 @@ export async function updateUser(ctx) {
 
 export async function postUserAuth(ctx) {
   const data = ctx.request.body // post过来的数据存在request.body里
-  const userInfo = await userModel.getUserByName(data.userName) // 数据库返回的数据
   let resDataTpl = new ResDataTpl().data()
+  let captchaUUID = data.captchaUUID
+  let captchaCode = data.captchaCode
+  let captchaTextInRedis = await new RedisToken().get(captchaUUID)
+  if (captchaCode !== captchaTextInRedis) {
+    resDataTpl.success = false
+    resDataTpl.message = '验证码错误'
+    ctx.body = resDataTpl
+    return
+  }
+  const userInfo = await userModel.getUserByName(data.userName) // 数据库返回的数据
   if (!userInfo) {
     resDataTpl.success = false
     resDataTpl.message = '用户不存在'

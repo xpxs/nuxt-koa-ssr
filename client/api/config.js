@@ -5,6 +5,14 @@ export const ApiConfig = {
     url: '/getMsg',
     type: 'get'
   },
+  getCaptcha: {
+    url: '/getCaptcha',
+    type: 'get'
+  },
+  checkCaptcha: {
+    url: '/checkCaptcha',
+    type: 'get'
+  },
   getUsers: {
     url: oauth + '/getUsers',
     type: 'get'

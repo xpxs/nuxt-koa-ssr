@@ -29,8 +29,7 @@ export const reqDataMixins = {
           vm.$router.push('/admin/login')
         })
         return
-      }
-      if (result.data.success) {
+      } else if (result.status === 200) {
         if (params.success && typeof params.success === 'function') {
           params.success(result)
         }
