@@ -1,34 +1,33 @@
 <template>
   <section class="container">
     <div class="particles">
-      <vue-particles
-        :particle-opacity="0.7"
-        :particles-number="80"
-        :particle-size="4"
-        :lines-width="1"
-        :line-linked="true"
-        :line-opacity="0.4"
-        :lines-distance="150"
-        :move-speed="3"
-        :hover-effect="true"
-        :click-effect="true"
-        color="#dedede"
-        shape-type="circle"
-        lines-color="#dedede"
-        hover-mode="grab"
-        click-mode="push"
-      />
+      <vue-particles 
+        :particle-opacity="0.7" 
+        :particles-number="80" 
+        :particle-size="4" 
+        :lines-width="1" 
+        :line-linked="true" 
+        :line-opacity="0.4" 
+        :lines-distance="150" 
+        :move-speed="3" 
+        :hover-effect="true" 
+        :click-effect="true" 
+        color="#dedede" 
+        shape-type="circle" 
+        lines-color="#dedede" 
+        hover-mode="grab" 
+        click-mode="push" />
     </div>
     <Row>
       <Col 
-        :xs="{ span: 18, offset: 3 }"
-        :sm="{ span: 12, offset: 6 }"
-        :md="{ span: 8, offset: 8 }"
-        :lg="{ span: 6, offset: 9 }"
+        :xs="{ span: 18, offset: 3 }" 
+        :sm="{ span: 12, offset: 6 }" 
+        :md="{ span: 8, offset: 8 }" 
+        :lg="{ span: 6, offset: 9 }" 
         class="login-form">
       <h1 class="tc mt20">登 录</h1>
       <Form 
-        ref="loginForm"
+        ref="loginForm" 
         :model="loginForm" 
         :rules="loginFormRule" 
         :label-width="60">
@@ -38,31 +37,34 @@
           <Input 
             v-model="loginForm.userName" 
             type="text" 
-            number><Icon 
-              slot="prepend" 
-              type="md-person"/></Input>
+            number>
+          <Icon 
+            slot="prepend" 
+            type="md-person" /></Input>
         </FormItem>
         <FormItem 
           label="密码" 
           prop="userPwd">
           <Input 
             v-model="loginForm.userPwd" 
-            type="password"><Icon 
-              slot="prepend" 
-              type="md-lock"/></Input>
+            type="password">
+          <Icon 
+            slot="prepend" 
+            type="md-lock" /></Input>
         </FormItem>
         <FormItem 
           label="验证码" 
           prop="captchaCode">
           <Input 
-            v-model="loginForm.captchaCode"
+            v-model="loginForm.captchaCode" 
             class="mr10" 
-            style="width: 120px;"><Icon
-              slot="prepend" 
-              type="ios-create"/></Input>
-          <span          
-            style="position: absolute; right: 0; top: 1px;" 
-            @click="fnGetCaptcha" 
+            style="width: 120px;">
+          <Icon 
+            slot="prepend" 
+            type="ios-create" /></Input>
+          <span
+            style="position: absolute; right: 0; top: 1px;"
+            @click="fnGetCaptcha"
             v-html="captchaData"/>
         </FormItem>
         <FormItem>
@@ -131,7 +133,7 @@ export default {
         loading: false,
         text: '登录'
       },
-      rememberPassword: false,
+      rememberPassword: true,
       loginForm: {
         userPwd: '',
         captchaCode: '',
@@ -154,9 +156,68 @@ export default {
     }
   },
   mounted() {
-    this.fnGetCaptcha()
+    let vm = this
+    vm.fnGetCaptcha()
+    let params = {
+      formName: 'loginForm',
+      formItems: ['userName', 'userPwd']
+    }
+    vm.fnGetCookie(params)
   },
   methods: {
+    fnSetCookie(params) {
+      let vm = this
+      exdays = exdays || 0
+      let exdate = vm.$moment()
+      console.log('------exdate------', exdate)
+      exdate.setTime(exdate.valueOf() + 24 * 60 * 60 * 1000 * exdays) //保存的天数
+      if (params.items.length === 0) {
+        return false
+      }
+      //字符串拼接cookie
+      for (let i = 0; i <= params.items.length; i++) {
+        window.document.cookie =
+          params.items[i].name +
+          '=' +
+          params.items[i].value +
+          ';path=' +
+          params.path +
+          ';expires=' +
+          exdate.moment.utc()
+      }
+      // window.document.cookie = "userName" + "=" + name + ";path=/c;expires=" + exdate.toGMTString();
+      // window.document.cookie = "userPwd" + "=" + pwd + ";path=/;expires=" + exdate.toGMTString();
+    },
+    //读取cookie
+    fnGetCookie(params) {
+      console.log('-------params-------', params)
+      if (document.cookie.length > 0) {
+        let arr = document.cookie.split(';') //这里显示的格式需要切割一下自己可输出看下
+        for (let i = 0; i < arr.length; i++) {
+          let arr2 = arr[i].split('=') //再次切割
+          //判断查找相对应的值
+          for (let j = 0; j <= params.formItems.length; j++) {
+            if (arr2[0] === params.formItems[j]) {
+              console.log(
+                'vm[params.formName][params.formItems[j]]',
+                vm[params.formName][params.formItems[j]]
+              )
+              console.log('arr2[1]', arr2[1])
+              vm[params.formName][params.formItems[j]] = arr2[1] //保存到保存数据的地方
+            }
+          }
+          // if (arr2[0] === 'userName') {
+          //   vm[params.formName].username = arr2[1]; //保存到保存数据的地方
+          // } else if (arr2[0] === 'userPwd') {
+          //   vm[params.formName].password = arr2[1];
+          // }
+        }
+      }
+    },
+    //清除cookie
+    fnClearCookie() {
+      this.fnSetCookie('', '', -1) //修改2值都为空，天数为负1天就好了
+    },
     fnGetCaptcha() {
       let vm = this
       vm.reqData({
@@ -179,6 +240,26 @@ export default {
       vm.$refs[name].validate(valid => {
         if (valid) {
           vm.loginForm.captchaUUID = vm.captchaForm.captchaUUID
+          //设置cookie或者清除cookie
+          if (vm.rememberPassword) {
+            let params = {
+              items: [
+                {
+                  name: 'userName',
+                  value: vm.loginForm.userName
+                },
+                {
+                  name: 'userPwd',
+                  value: vm.loginForm.userPwd
+                }
+              ],
+              exdays: 2,
+              path: '/custom/login'
+            }
+            vm.fnSetCookie(params)
+          } else {
+            vm.fnClearCookie()
+          }
           vm.fnSubmiting(true, '登录中...')
           vm.reqData({
             url: 'adminLogin',
