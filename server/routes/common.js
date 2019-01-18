@@ -2,7 +2,9 @@ import Router from 'koa-router'
 import { ResDataTpl } from '../common/utils' // 引入返回数据模板
 import { RedisToken } from '../common/utils'
 import svgCaptcha from 'svg-captcha'
+import path from 'path'
 const router = Router()
+svgCaptcha.loadFont(path.join(__dirname, '../common/georgia.ttf'))
 
 // 用户列表
 router
@@ -18,7 +20,7 @@ router
       noise: 3,
       background: '#e2f6f3',
       width: 80,
-      fontSize: 42,
+      fontSize: 36,
       height: 32
     })
     await new RedisToken().set(captchaUUID, captcha.text)

@@ -86,6 +86,7 @@
 </template>
 <script>
 import { reqDataMixins } from '~/mixins'
+import VueCookies from 'vue-cookies'
 import UUID from 'uuid'
 export default {
   mixins: [reqDataMixins],
@@ -167,56 +168,33 @@ export default {
   methods: {
     fnSetCookie(params) {
       let vm = this
-      exdays = exdays || 0
-      let exdate = vm.$moment()
-      console.log('------exdate------', exdate)
-      exdate.setTime(exdate.valueOf() + 24 * 60 * 60 * 1000 * exdays) //保存的天数
       if (params.items.length === 0) {
         return false
       }
-      //字符串拼接cookie
       for (let i = 0; i <= params.items.length; i++) {
-        window.document.cookie =
-          params.items[i].name +
-          '=' +
-          params.items[i].value +
-          ';path=' +
-          params.path +
-          ';expires=' +
-          exdate.moment.utc()
-      }
-      // window.document.cookie = "userName" + "=" + name + ";path=/c;expires=" + exdate.toGMTString();
-      // window.document.cookie = "userPwd" + "=" + pwd + ";path=/;expires=" + exdate.toGMTString();
-    },
-    //读取cookie
-    fnGetCookie(params) {
-      console.log('-------params-------', params)
-      if (document.cookie.length > 0) {
-        let arr = document.cookie.split(';') //这里显示的格式需要切割一下自己可输出看下
-        for (let i = 0; i < arr.length; i++) {
-          let arr2 = arr[i].split('=') //再次切割
-          //判断查找相对应的值
-          for (let j = 0; j <= params.formItems.length; j++) {
-            if (arr2[0] === params.formItems[j]) {
-              console.log(
-                'vm[params.formName][params.formItems[j]]',
-                vm[params.formName][params.formItems[j]]
-              )
-              console.log('arr2[1]', arr2[1])
-              vm[params.formName][params.formItems[j]] = arr2[1] //保存到保存数据的地方
-            }
-          }
-          // if (arr2[0] === 'userName') {
-          //   vm[params.formName].username = arr2[1]; //保存到保存数据的地方
-          // } else if (arr2[0] === 'userPwd') {
-          //   vm[params.formName].password = arr2[1];
-          // }
+        if (params.items[i] !== undefined) {
+          console.log('params.items[i] ', params.items[i])
+          VueCookies.set(
+            params.items[i].name,
+            params.items[i].value,
+            params.exdays
+          )
         }
       }
     },
+    //读取cookie
+    fnGetCookie(params) {
+      let vm = this
+      for (let i = 0; i <= params.formItems.length; i++) {
+        let value = VueCookies.get(params.formItems[i])
+        vm[params.formName][params.formItems[i]] = value //保存到保存数据的地方
+      }
+    },
     //清除cookie
-    fnClearCookie() {
-      this.fnSetCookie('', '', -1) //修改2值都为空，天数为负1天就好了
+    fnClearCookie(params) {
+      for (let i = 0; i <= params.length; i++) {
+        VueCookies.remove(params[i])
+      }
     },
     fnGetCaptcha() {
       let vm = this
@@ -241,24 +219,24 @@ export default {
         if (valid) {
           vm.loginForm.captchaUUID = vm.captchaForm.captchaUUID
           //设置cookie或者清除cookie
+          let params = {
+            items: [
+              {
+                name: 'userName',
+                value: vm.loginForm.userName
+              },
+              {
+                name: 'userPwd',
+                value: vm.loginForm.userPwd
+              }
+            ],
+            exdays: '2d',
+            path: '/custom/login'
+          }
           if (vm.rememberPassword) {
-            let params = {
-              items: [
-                {
-                  name: 'userName',
-                  value: vm.loginForm.userName
-                },
-                {
-                  name: 'userPwd',
-                  value: vm.loginForm.userPwd
-                }
-              ],
-              exdays: 2,
-              path: '/custom/login'
-            }
             vm.fnSetCookie(params)
           } else {
-            vm.fnClearCookie()
+            vm.fnClearCookie(['userName', 'userPwd'])
           }
           vm.fnSubmiting(true, '登录中...')
           vm.reqData({
