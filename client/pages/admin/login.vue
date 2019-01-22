@@ -75,7 +75,7 @@
             @click="fnSubmit('loginForm')">{{ btnParams.text }}</Button>
           <Button 
             type="default" 
-            style="margin-left: 8px" 
+            style="margin-left: 8px; margin-right: 10px;" 
             @click="fnReset('loginForm')">重置</Button>
           <Checkbox v-model="rememberPassword">记住密码</Checkbox>
         </FormItem>
@@ -86,6 +86,7 @@
 </template>
 <script>
 import { reqDataMixins } from '~/mixins'
+import crypto from 'crypto'
 import VueCookies from 'vue-cookies'
 import UUID from 'uuid'
 export default {
@@ -158,6 +159,7 @@ export default {
   },
   mounted() {
     let vm = this
+    console.log('crypto', crypto)
     vm.fnGetCaptcha()
     let params = {
       formName: 'loginForm',
@@ -173,7 +175,6 @@ export default {
       }
       for (let i = 0; i <= params.items.length; i++) {
         if (params.items[i] !== undefined) {
-          console.log('params.items[i] ', params.items[i])
           VueCookies.set(
             params.items[i].name,
             params.items[i].value,
@@ -227,7 +228,7 @@ export default {
               },
               {
                 name: 'userPwd',
-                value: vm.loginForm.userPwd
+                value: vm.fnCryptPwd(vm.loginForm.userPwd)
               }
             ],
             exdays: '2d',
@@ -277,6 +278,10 @@ export default {
     fnReset(name) {
       this.$refs[name].resetFields()
       this.fnSubmiting(false, '登录')
+    },
+    fnCryptPwd(password) {
+      var md5 = crypto.createHash('md5')
+      return md5.update(password).digest('hex')
     }
   }
 }
