@@ -83,7 +83,7 @@ export class RedisToken {
   async get(key) {
     let self = this
     let data = await self.redis.getAsync(key)
-    console.log('--------getdata-------', data)
+    // console.log('--------getdata-------', data)
     return data
   }
 }
@@ -102,9 +102,9 @@ export class CreateToken {
       iat: loginTime //登录时间
     }
     const token = JWT.sign(payload, CONFIG_API.SECRET_JWT) // 签发token
-    console.log('this.data.user_id', this.data.user_id)
+    // console.log('this.data.user_id', this.data.user_id)
     let data = await new RedisToken().set(this.data.user_id, token)
-    console.log('data-----', data)
+    // console.log('data-----', data)
     return token
   }
 }
@@ -151,15 +151,15 @@ export class VeriftyToken {
   async getJWTUserToken() {
     const self = this
     let splitToken = self.token.split(' ')[1]
-    console.log('-------splitToken---------', splitToken)
+    // console.log('-------splitToken---------', splitToken)
     let decoded = await JWT.verify(splitToken, CONFIG_API.SECRET_JWT)
     let doc = await new RedisToken().get(decoded.id)
-    console.log('-------decoded---------', decoded)
-    console.log('-------doc---------', doc)
+    // console.log('-------decoded---------', decoded)
+    // console.log('-------doc---------', doc)
     let reqTimeKey = decoded.id + ' reqTime'
-    console.log('-------reqTimeKey---------', reqTimeKey)
+    // console.log('-------reqTimeKey---------', reqTimeKey)
     let reqTimeData = await new RedisToken().get(reqTimeKey)
-    console.log('-------reqTimeData---------', reqTimeData)
+    // console.log('-------reqTimeData---------', reqTimeData)
     //拦截判断接口请求频次
     if (reqTimeData && self.time - reqTimeData < 1000) {
       self.resDataTpl.success = false

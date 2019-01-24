@@ -1,10 +1,16 @@
 import vue from 'vue'
+import { session, localStorageRemoveItem } from '@/plugins/utils'
+import { commonReq } from '@/api/commonReq'
 export const state = () => ({
   tabs: [],
+  user: '',
   token: '',
   activeIndex: '/admin'
 })
 export const mutations = {
+  SET_USER(state, user) {
+    state.user = user
+  },
   ADD_SESSION_TAB(state, tabs) {
     state.tabs = tabs
   },
@@ -14,16 +20,16 @@ export const mutations = {
       state.tabs = []
     }
     state.tabs.push(tab)
-    vue.prototype.utils.session('a-leftMenus', state.tabs)
+    session('a-leftMenus', state.tabs)
   },
   //删除tab
   REMOVE_TAB(state, tab) {
-    let tabs = vue.prototype.utils.session('a-leftMenus')
+    let tabs = user
     vue.prototype._.remove(tabs, function(n) {
       return n.path === tab
     })
     state.tabs = tabs
-    vue.prototype.utils.session('a-leftMenus', state.tabs)
+    session('a-leftMenus', state.tabs)
   },
   //清空tab
   DROP_TAB(state, tab) {
@@ -34,13 +40,14 @@ export const mutations = {
     state.activeIndex = index
   },
   SET_TOKEN(state) {
-    let token = vue.prototype.utils.session('a-token')
+    let token = session('a-token')
     state.token = token
   },
   LOGOUT(state) {
-    vue.prototype.utils.localStorageRemoveItem()
+    localStorageRemoveItem()
     state.tabs = []
     state.token = ''
+    state.user = ''
   }
 }
 export const getters = {}
@@ -66,5 +73,8 @@ export const actions = {
   },
   logout({ commit }) {
     commit('LOGOUT')
+  },
+  setUser({ commit }, user) {
+    commit('SET_USER', user)
   }
 }

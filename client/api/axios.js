@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { catchError, session } from '@/plugins/utils'
 import { BASE } from './URL'
+import vue from 'vue'
 import Moment from 'moment'
 // 定义fetch函数，config为配置
 export const fetch = config => {
@@ -38,6 +39,7 @@ export const fetch = config => {
       let token = response.headers.token
       if (token) {
         session('a-token', token)
+        vue.prototype.$vueCookies.set('jwt', token, 10 * 60 * 1000)
       }
       return response
     }, catchError)

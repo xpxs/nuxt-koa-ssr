@@ -61,8 +61,15 @@ module.exports = {
     {
       src: '@/plugins/particles.js',
       ssr: false
+    },
+    {
+      src: '@/plugins/vue-cookies.js',
+      ssr: true
     }
   ],
+  router: {
+    middleware: 'auth'
+  },
   /*
    ** Customize the progress-bar color
    */

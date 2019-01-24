@@ -87,7 +87,7 @@
 <script>
 import { reqDataMixins } from '~/mixins'
 import crypto from 'crypto'
-import VueCookies from 'vue-cookies'
+import jwtDecode from 'jwt-decode'
 import UUID from 'uuid'
 export default {
   mixins: [reqDataMixins],
@@ -175,7 +175,7 @@ export default {
       }
       for (let i = 0; i <= params.items.length; i++) {
         if (params.items[i] !== undefined) {
-          VueCookies.set(
+          vm.$vueCookies.set(
             params.items[i].name,
             params.items[i].value,
             params.exdays
@@ -186,15 +186,16 @@ export default {
     //读取cookie
     fnGetCookie(params) {
       let vm = this
+      console.log('vm.VueCookies', vm.$vueCookies)
       for (let i = 0; i <= params.formItems.length; i++) {
-        let value = VueCookies.get(params.formItems[i])
+        let value = vm.$vueCookies.get(params.formItems[i])
         vm[params.formName][params.formItems[i]] = value //保存到保存数据的地方
       }
     },
     //清除cookie
     fnClearCookie(params) {
       for (let i = 0; i <= params.length; i++) {
-        VueCookies.remove(params[i])
+        vm.$vueCookies.remove(params[i])
       }
     },
     fnGetCaptcha() {
@@ -250,8 +251,10 @@ export default {
                 vm.utils.session('a-loginRetentionTime', thisTime)
                 vm.utils.messageFn(res.data.message)
                 // vm.utils.session('a-token', res.data.data)
+                session('a-user', jwtDecode(res.data.data))
                 vm.$router.push({ path: '/admin' })
                 vm.$store.dispatch('setToken')
+                vm.$store.dispatch('setUser', jwtDecode(res.data.data))
               } else {
                 vm.utils.errorFn(res.data.message, () => {
                   vm.fnSubmiting(false, '登录')

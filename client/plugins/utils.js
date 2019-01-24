@@ -4,7 +4,7 @@ import Moment from 'moment'
 import { getData } from '@/api/axios.js'
 
 export const localStorageRemoveItem = keys => {
-  keys = keys || ['a-leftMenus', 'a-token', 'a-loginRetentionTime']
+  keys = keys || ['a-leftMenus', 'a-token', 'a-loginRetentionTime', 'a-user']
   for (var i = 0; i <= keys.length; i++) {
     if (localStorage.getItem(keys[i])) {
       localStorage.removeItem(keys[i])

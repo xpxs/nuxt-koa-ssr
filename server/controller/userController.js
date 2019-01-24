@@ -156,6 +156,7 @@ export async function postUserAuth(ctx) {
   }).token()
   resDataTpl.success = true
   resDataTpl.message = '登录成功'
+  resDataTpl.data = token
   ctx.set('Token', token)
   ctx.body = resDataTpl
 }
