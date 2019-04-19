@@ -36,10 +36,12 @@
               title="锁住账户"/>
           </Badge>
           <Badge>
-            <Avatar 
+            <Avatar
               shape="circle" 
               icon="md-power" 
-              title="退出账户"/>
+              title="退出账户" 
+              @click.native="fnLogout" 
+            />
           </Badge>
         </div>
       </Content>
@@ -91,6 +93,13 @@ export default {
       vm.utils.session('a-leftMenus', tabs)
     }
     vm.$store.dispatch('addSessionTab', tabs)
+  },
+  methods: {
+    fnLogout() {
+      let vm = this
+      vm.$store.dispatch('logout')
+      vm.$router.push({ path: '/admin/login' })
+    }
   }
 }
 </script>

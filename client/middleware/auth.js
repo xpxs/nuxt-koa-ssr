@@ -1,11 +1,9 @@
 import { session } from '@/plugins/utils'
 import jwtDecode from 'jwt-decode'
-
 export const getUserFromCookie = req => {
   if (!req.headers.cookie) {
     return
   }
-  console.log('req.headers', req.headers)
   const jwtCookie = req.headers.cookie
     .split(';')
     .find(c => c.trim().startsWith('jwt='))
@@ -17,12 +15,19 @@ export const getUserFromCookie = req => {
   return jwtDecode(jwt)
 }
 
-export default function({ store, req }) {
+export default function({ store, req, route, redirect }) {
   let isServer = process.server
   // If nuxt generate, pass this middleware
-  if (isServer && !req) {
-    return
+  if (
+    isServer &&
+    req.headers.cookie &&
+    req.headers.cookie.indexOf('jwt=') === -1
+  ) {
+    return redirect('/admin/login')
   }
   const loggedUser = isServer ? getUserFromCookie(req) : session('a-user')
+  if (route.path === '/admin/login' && loggedUser) {
+    return redirect('/admin')
+  }
   store.dispatch('setUser', loggedUser)
 }

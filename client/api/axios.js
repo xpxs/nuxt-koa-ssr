@@ -46,7 +46,7 @@ export const fetch = config => {
     // 请求成功后执行的函数
     instance(config)
       .then(res => {
-        console.log(res)
+        // console.log(res)
         resolve(res)
         // 失败后执行的函数
       })

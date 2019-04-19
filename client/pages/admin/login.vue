@@ -275,6 +275,12 @@ export default {
               } else {
                 vm.utils.errorFn(res.data.message, () => {
                   vm.fnSubmiting(false, '登录')
+                  vm.fnGetCaptcha()
+                  let params = {
+                    formName: 'loginForm',
+                    formItems: ['userName', 'userPwd']
+                  }
+                  vm.fnGetCookie(params)
                 })
               }
             },

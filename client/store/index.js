@@ -44,7 +44,9 @@ export const mutations = {
     state.token = token
   },
   LOGOUT(state) {
+    vue.prototype.utils.messageFn('退出成功！')
     localStorageRemoveItem()
+    vue.prototype.$vueCookies.remove('jwt')
     state.tabs = []
     state.token = ''
     state.user = ''
