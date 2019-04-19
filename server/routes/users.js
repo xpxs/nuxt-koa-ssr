@@ -7,29 +7,6 @@ import { CONFIG_API } from '../config/CONFIG_API'
 import { VeriftyToken, Upload } from '../common/utils'
 import * as userController from '../controller/userController' // 引入userController
 
-function parserequest(urls, ctx) {
-  let arg1 = 'D:/tanpeng/nuxt-koa-ssr/client/static/uploads/20181226/face0.jpg'
-  let arg2 = 'D:/tanpeng/nuxt-koa-ssr/client/static/'
-  var exec_path = 'python D:/tanpeng/nuxt-koa-ssr/server/routes/add.py '
-  exec(exec_path, function(error, stdout, stderr) {
-    console.log('error', error)
-    console.log('stdout', stdout)
-    console.log('stderr', stderr)
-    let data = ''
-    if (stdout.length > 1) {
-      data = `{errcode:0,errmsg:'${stdout}'}`
-    } else {
-      data = `{errcode:0,errmsg:'${stdout}'}`
-    }
-    ctx.body = { data: JSON.stringify(data) }
-    if (error) {
-      data = `{errcode:500,errmsg:'${error}'}`
-      ctx.body = { data: JSON.stringify(data) }
-    }
-  })
-  console.log('22222')
-}
-
 //加载配置
 let upload = new Upload().upload()
 let filePath = new Upload().path()
@@ -45,7 +22,6 @@ router
   })
   //获得用户列表
   .get(CONFIG_API.ENDPOINT_BACKEND_AUTH + '/getUsers', async (ctx, next) => {
-    // parserequest('../../client/static/uploads/20181226/face0.jpg', ctx)
     let flag = await new VeriftyToken(ctx).getJWTUserToken()
     if (flag) {
       await userController.getUsers(ctx)

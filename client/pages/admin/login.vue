@@ -159,7 +159,6 @@ export default {
   },
   mounted() {
     let vm = this
-    console.log('crypto', crypto)
     vm.fnGetCaptcha()
     let params = {
       formName: 'loginForm',
@@ -186,7 +185,6 @@ export default {
     //读取cookie
     fnGetCookie(params) {
       let vm = this
-      console.log('vm.VueCookies', vm.$vueCookies)
       for (let i = 0; i <= params.formItems.length; i++) {
         let value = vm.$vueCookies.get(params.formItems[i])
         vm[params.formName][params.formItems[i]] = value //保存到保存数据的地方
@@ -194,6 +192,7 @@ export default {
     },
     //清除cookie
     fnClearCookie(params) {
+      let vm = this
       for (let i = 0; i <= params.length; i++) {
         vm.$vueCookies.remove(params[i])
       }
@@ -220,25 +219,23 @@ export default {
       vm.$refs[name].validate(valid => {
         if (valid) {
           vm.loginForm.captchaUUID = vm.captchaForm.captchaUUID
-          //设置cookie或者清除cookie
-          let params = {
-            items: [
-              {
-                name: 'userName',
-                value: vm.loginForm.userName
-              },
-              {
-                name: 'userPwd',
-                value: vm.fnCryptPwd(vm.loginForm.userPwd)
-              }
-            ],
-            exdays: '2d',
-            path: '/custom/login'
-          }
-          if (vm.rememberPassword) {
-            vm.fnSetCookie(params)
+          let userPwd = vm.loginForm.userPwd
+          let pwdBadge = '%%&%%'
+          let fnCryptPwd = ''
+          /**
+           * [if 当是从cookie取出来的密码]
+           * @Author   tanpeng
+           * @DateTime 2019-04-19
+           * @version  [v1.0]
+           * @param    {[type]}   userPwd.indexOf(pwdBadge) >             -1 [description]
+           * @return   {[type]}                             [description]
+           */
+          if (userPwd.indexOf(pwdBadge) > -1) {
+            vm.loginForm.userPwd = userPwd.split(pwdBadge)[0]
+            fnCryptPwd = userPwd
           } else {
-            vm.fnClearCookie(['userName', 'userPwd'])
+            fnCryptPwd = vm.fnCryptPwd(userPwd)
+            vm.loginForm.userPwd = fnCryptPwd.split(pwdBadge)[0]
           }
           vm.fnSubmiting(true, '登录中...')
           vm.reqData({
@@ -246,12 +243,32 @@ export default {
             params: 'loginForm',
             success: res => {
               if (res.data.success) {
+                //设置cookie或者清除cookie
+                let params = {
+                  items: [
+                    {
+                      name: 'userName',
+                      value: vm.loginForm.userName
+                    },
+                    {
+                      name: 'userPwd',
+                      value: fnCryptPwd
+                    }
+                  ],
+                  exdays: '2d',
+                  path: '/admin/login'
+                }
+                if (vm.rememberPassword) {
+                  vm.fnSetCookie(params)
+                } else {
+                  vm.fnClearCookie(['userName', 'userPwd'])
+                }
                 //登录保持时间
                 let thisTime = vm.$moment().valueOf()
                 vm.utils.session('a-loginRetentionTime', thisTime)
                 vm.utils.messageFn(res.data.message)
                 // vm.utils.session('a-token', res.data.data)
-                session('a-user', jwtDecode(res.data.data))
+                vm.utils.session('a-user', jwtDecode(res.data.data))
                 vm.$router.push({ path: '/admin' })
                 vm.$store.dispatch('setToken')
                 vm.$store.dispatch('setUser', jwtDecode(res.data.data))
@@ -284,7 +301,7 @@ export default {
     },
     fnCryptPwd(password) {
       var md5 = crypto.createHash('md5')
-      return md5.update(password).digest('hex')
+      return md5.update(password).digest('hex') + '%%&%%'
     }
   }
 }

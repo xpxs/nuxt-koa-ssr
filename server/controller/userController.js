@@ -92,8 +92,7 @@ export async function getUserInfo(ctx) {
  */
 export async function addUser(ctx, values) {
   let resDataTpl = new ResDataTpl().data()
-  values.user_name = 'admin'
-  values.user_pwd = bcrypt.hashSync('admin', 8)
+  values.user_pwd = bcrypt.hashSync('21232f297a57a5a743894a0e4a801fc3', 8)
   let data = await userModel.addUser(values)
   if (data) {
     resDataTpl.message = '新增更新成功'
@@ -138,6 +137,7 @@ export async function postUserAuth(ctx) {
     return
   }
   const userInfo = await userModel.getUserByName(data.userName) // 数据库返回的数据
+  console.log('userInfo', userInfo)
   if (!userInfo) {
     resDataTpl.success = false
     resDataTpl.message = '用户不存在'
