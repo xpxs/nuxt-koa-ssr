@@ -1,5 +1,5 @@
 import vue from 'vue'
-import { session, localStorageRemoveItem } from '@/plugins/utils'
+import { session, localStorageRemoveItem, messageFn } from '@/plugins/utils'
 import { commonReq } from '@/api/commonReq'
 export const state = () => ({
   tabs: [],
@@ -24,7 +24,7 @@ export const mutations = {
   },
   //删除tab
   REMOVE_TAB(state, tab) {
-    let tabs = user
+    let tabs = state.tabs
     vue.prototype._.remove(tabs, function(n) {
       return n.path === tab
     })
@@ -44,7 +44,7 @@ export const mutations = {
     state.token = token
   },
   LOGOUT(state) {
-    vue.prototype.utils.messageFn('退出成功！')
+    messageFn('退出成功！')
     localStorageRemoveItem()
     vue.prototype.$vueCookies.remove('jwt')
     state.tabs = []
