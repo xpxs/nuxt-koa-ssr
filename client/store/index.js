@@ -5,7 +5,9 @@ export const state = () => ({
   tabs: [],
   user: '',
   token: '',
-  activeIndex: '/admin'
+  activeIndex: '/admin',
+  locales: ['en', 'zh'],
+  locale: null
 })
 export const mutations = {
   SET_USER(state, user) {
@@ -43,6 +45,9 @@ export const mutations = {
     let token = session('a-token')
     state.token = token
   },
+  SET_LANG(state, lang) {
+    state.locale = lang
+  },
   LOGOUT(state) {
     messageFn('退出成功！')
     localStorageRemoveItem()
@@ -75,6 +80,9 @@ export const actions = {
   },
   logout({ commit }) {
     commit('LOGOUT')
+  },
+  setLang({ commit }, lang) {
+    commit('SET_LANG', lang)
   },
   setUser({ commit }, user) {
     commit('SET_USER', user)

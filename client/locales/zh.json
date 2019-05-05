@@ -1,0 +1,26 @@
+{
+  "login": {
+    "userRequired": "User Name is required",
+    "userPlaceholder": "用户名",
+    "pwdRequired": "Password is required",
+    "pwdPlaceholder": "密码",
+    "captchaRequired": "Captcha is required",
+    "captchaPlaceholder": "验证码",
+    "login": "登录",
+    "logining": "登录中...",
+    "reset": "重置",
+    "remember": "记住密码"
+  },
+  "lang": "zh",
+  "langname": "English",
+  "changelang": "en",
+  "nav": {
+    "home": "Home"
+  },
+  "head": {
+    "pwd": "Password",
+    "exit": "Exit"
+  },
+  "tagline":
+    "Application boilerplate based on Vue.js 2.x, Koa 2.x, Element-UI, Axios, Vue i18n and Nuxt.js"
+}

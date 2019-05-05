@@ -1,0 +1,26 @@
+{
+  "login": {
+    "userRequired": "User Name is required",
+    "userPlaceholder": "User Name",
+    "pwdRequired": "Password is required",
+    "pwdPlaceholder": "Password",
+    "captchaRequired": "Captcha is required",
+    "captchaPlaceholder": "Captcha",
+    "login": "Login",
+    "logining": "logining...",
+    "reset": "Reset",
+    "remember": "Remember Me"
+  },
+  "lang": "en",
+  "langname": "简体中文",
+  "changelang": "zh",
+  "nav": {
+    "home": "Home"
+  },
+  "head": {
+    "pwd": "Password",
+    "exit": "Exit"
+  },
+  "tagline":
+    "Application boilerplate based on Vue.js 2.x, Koa 2.x, Element-UI, Axios, Vue i18n and Nuxt.js"
+}

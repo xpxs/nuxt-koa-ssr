@@ -83,7 +83,10 @@ export default {
           },
           {
             title: '性别',
-            key: 'userSex'
+            key: 'userSex',
+            render: (h, params) => {
+              return h('span', params.row.userSex === '0' ? '女' : '男')
+            }
           },
           {
             title: '手机号',

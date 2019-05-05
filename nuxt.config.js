@@ -43,6 +43,10 @@ module.exports = {
    */
   plugins: [
     {
+      src: '@/plugins/i18n.js',
+      ssr: true
+    },
+    {
       src: '@/plugins/iview.js',
       ssr: true
     },

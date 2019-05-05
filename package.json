@@ -80,10 +80,12 @@
     "jsonwebtoken": "8.4.0",
     "koa-multer": "^1.0.2",
     "mysql2": "1.6.1",
+    "negotiator": "^0.6.2",
     "node-jvm": "^0.2.3",
     "nodemon": "1.11.0",
     "prettier": "1.14.3",
     "scmp": "2.0.0",
+    "vue-i18n": "^8.11.2",
     "vue-particles": "1.0.9"
   }
 }

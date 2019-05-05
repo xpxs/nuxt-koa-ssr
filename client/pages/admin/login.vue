@@ -25,14 +25,15 @@
         :md="{ span: 8, offset: 8 }" 
         :lg="{ span: 6, offset: 9 }" 
         class="login-form">
-      <h1 class="tc mt20">登 录</h1>
+      <h1 class="tc mt20">{{ $t('login.login') }}</h1>
+      <Button @click="fnChangeLang">{{ $t('langname') }}</Button>
       <Form 
         ref="loginForm" 
         :model="loginForm" 
         :rules="loginFormRule" 
-        :label-width="60">
+        :label-width="$t('lang') === 'en' ? 100 : 60">
         <FormItem 
-          label="用户名" 
+          :label="$t('login.userPlaceholder')" 
           prop="userName">
           <Input 
             v-model="loginForm.userName" 
@@ -43,7 +44,7 @@
             type="md-person" /></Input>
         </FormItem>
         <FormItem 
-          label="密码" 
+          :label="$t('login.pwdPlaceholder')" 
           prop="userPwd">
           <Input 
             v-model="loginForm.userPwd" 
@@ -53,7 +54,7 @@
             type="md-lock" /></Input>
         </FormItem>
         <FormItem 
-          label="验证码" 
+          :label="$t('login.captchaPlaceholder')" 
           prop="captchaCode">
           <Input 
             v-model="loginForm.captchaCode" 
@@ -76,8 +77,8 @@
           <Button 
             type="default" 
             style="margin-left: 8px; margin-right: 10px;" 
-            @click="fnReset('loginForm')">重置</Button>
-          <Checkbox v-model="rememberPassword">记住密码</Checkbox>
+            @click="fnReset('loginForm')">{{ $t('login.reset') }}</Button>
+          <Checkbox v-model="rememberPassword">{{ $t('login.remember') }}</Checkbox>
         </FormItem>
       </Form>
       </Col>
@@ -133,7 +134,7 @@ export default {
       captchaData: '',
       btnParams: {
         loading: false,
-        text: '登录'
+        text: this.$t('login.login')
       },
       rememberPassword: true,
       loginForm: {
@@ -167,6 +168,13 @@ export default {
     vm.fnGetCookie(params)
   },
   methods: {
+    fnChangeLang() {
+      let vm = this
+      let changelang = vm.$t('changelang')
+      vm.$store.dispatch('setLang', changelang)
+      vm.$i18n.locale = changelang
+      vm.btnParams.text = vm.$t('login.login')
+    },
     fnSetCookie(params) {
       let vm = this
       if (params.items.length === 0) {
@@ -237,7 +245,7 @@ export default {
             fnCryptPwd = vm.fnCryptPwd(userPwd)
             vm.loginForm.userPwd = fnCryptPwd.split(pwdBadge)[0]
           }
-          vm.fnSubmiting(true, '登录中...')
+          vm.fnSubmiting(true, vm.$t('login.logining'))
           vm.reqData({
             url: 'adminLogin',
             params: 'loginForm',
@@ -274,7 +282,7 @@ export default {
                 vm.$store.dispatch('setUser', jwtDecode(res.data.data))
               } else {
                 vm.utils.errorFn(res.data.message, () => {
-                  vm.fnSubmiting(false, '登录')
+                  vm.fnSubmiting(false, vm.$t('login.login'))
                   vm.fnGetCaptcha()
                   let params = {
                     formName: 'loginForm',
@@ -286,7 +294,7 @@ export default {
             },
             error: err => {
               vm.utils.catchErrorStatus(err.status, err.data.message, () => {
-                vm.fnSubmiting(false, '登录')
+                vm.fnSubmiting(false, vm.$t('login.login'))
               })
             }
           })
@@ -295,7 +303,7 @@ export default {
           vm.$Message.error({
             content: '表单验证失败',
             onClose: function() {
-              vm.fnSubmiting(false, '登录')
+              vm.fnSubmiting(false, vm.$t('login.login'))
             }
           })
         }
@@ -303,7 +311,7 @@ export default {
     },
     fnReset(name) {
       this.$refs[name].resetFields()
-      this.fnSubmiting(false, '登录')
+      this.fnSubmiting(false, vm.$t('login.login'))
     },
     fnCryptPwd(password) {
       var md5 = crypto.createHash('md5')
