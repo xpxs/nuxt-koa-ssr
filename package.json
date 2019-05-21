@@ -44,6 +44,7 @@
     "moment": "2.22.2",
     "node-sass": "4.10.0",
     "nuxt": "2.3.2",
+    "nuxt-generate-cluster": "^2.6.0",
     "path": "0.12.7",
     "redis": "^2.8.0",
     "sass-loader": "7.1.0",

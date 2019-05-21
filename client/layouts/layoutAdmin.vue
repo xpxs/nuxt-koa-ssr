@@ -14,6 +14,7 @@
           <nuxt-link to="/admin/login"><Icon type="ios-flower" /> 公众号管理</nuxt-link>
         </div>
         <div class="right-nav">
+          <Button @click="fnChangeLang">{{ $t('langname') }}</Button>
           <Button 
             type="primary" 
             @click="collapsed = !collapsed">切换</Button>
@@ -95,6 +96,12 @@ export default {
     vm.$store.dispatch('addSessionTab', tabs)
   },
   methods: {
+    fnChangeLang() {
+      let vm = this
+      let changelang = vm.$t('changelang')
+      vm.$store.dispatch('setLang', changelang)
+      vm.$i18n.locale = changelang
+    },
     fnLogout() {
       let vm = this
       vm.$store.dispatch('logout')
