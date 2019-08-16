@@ -1,6 +1,6 @@
 let URL = ''
 if (process.env.__ENV === 'development') {
-  URL = 'http://127.0.0.1:3000'
+  URL = ''
 } else if (process.env.__ENV === 'alpha') {
   URL = 'http://127.0.0.1:3000'
 } else if (process.env.__ENV === 'production') {

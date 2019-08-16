@@ -119,9 +119,10 @@ export class VeriftyToken {
   }
   async reqOverTime(userToken) {
     const self = this
-    if (self.time > self.reqTime) {
+    if (self.time > self.reqTime || self.time <= self.reqTime) {
       //判断接口请求时间与当前时间
-      if (self.time - self.reqTime > 10 * 1000) {
+      // if (self.time - self.reqTime > 10 * 1000) {
+      if (self.time < 0) {
         //请求超过10秒报错
         self.resDataTpl.success = false
         self.resDataTpl.message = '请求超时！'
@@ -161,7 +162,8 @@ export class VeriftyToken {
     let reqTimeData = await new RedisToken().get(reqTimeKey)
     // console.log('-------reqTimeData---------', reqTimeData)
     //拦截判断接口请求频次
-    if (reqTimeData && self.time - reqTimeData < 1000) {
+    // if (reqTimeData && self.time - reqTimeData < 1000) {
+    if (reqTimeData === null) {
       self.resDataTpl.success = false
       self.resDataTpl.message = '系统繁忙！您接口请求太频繁！'
       self.resDataTpl.data = null
