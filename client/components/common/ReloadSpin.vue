@@ -1,8 +1,8 @@
 <template>
   <Spin 
-    v-if="spinShow"
-    size="large"
-    fix/>
+    v-if="spinShow" 
+    size="large" 
+    fix />
 </template>
 <script>
 export default {

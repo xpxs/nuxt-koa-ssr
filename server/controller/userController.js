@@ -39,9 +39,11 @@ export async function getUsers(ctx) {
     ctx.body = resDataTpl
     return
   }
+  console.log('------start------', Moment().valueOf())
   const users = await userModel.getUsersCount(pageNum, pageSize)
   let userData = new UserData(users)
   if (users) {
+    console.log('------end------', Moment().valueOf())
     resDataTpl.success = true
     resDataTpl.message = '查询成功'
     resDataTpl.data = userData.list()

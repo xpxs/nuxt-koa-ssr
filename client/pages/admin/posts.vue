@@ -4,7 +4,8 @@
       :headers="headers"
       :on-success="handleSuccess"
       multiple
-      action="http://127.0.0.1:3000/oauth/upload">
+      action="http://127.0.0.1:3000/oauth/upload"
+    >
       <Button icon="ios-cloud-upload-outline">选择图片</Button>
     </Upload>
   </div>

@@ -1,49 +1,42 @@
 export default {
-  'appenders': {
-    'access': {
-      'type': 'dateFile',
-      'filename': './server/logs/access.log',
-      'pattern': '-yyyy-MM-dd'
+  appenders: {
+    access: {
+      type: 'dateFile',
+      filename: './server/logs/access.log',
+      pattern: '-yyyy-MM-dd'
     },
     'rule-console': {
-      'type': 'console'
+      type: 'console'
     },
     'rule-file': {
-      'type': 'dateFile',
-      'filename': './server/logs/server-',
-      'encoding': 'utf-8',
-      'maxLogSize': 10000000,
-      'numBackups': 3,
-      'pattern': 'yyyy-MM-dd.log',
-      'alwaysIncludePattern': true
+      type: 'dateFile',
+      filename: './server/logs/server-',
+      encoding: 'utf-8',
+      maxLogSize: 10000000,
+      numBackups: 3,
+      pattern: 'yyyy-MM-dd.log',
+      alwaysIncludePattern: true
     },
     'rule-error': {
-      'type': 'dateFile',
-      'filename': './server/logs/error-',
-      'encoding': 'utf-8',
-      'maxLogSize': 1000000,
-      'numBackups': 3,
-      'pattern': 'yyyy-MM-dd.log',
-      'alwaysIncludePattern': true
+      type: 'dateFile',
+      filename: './server/logs/error-',
+      encoding: 'utf-8',
+      maxLogSize: 1000000,
+      numBackups: 3,
+      pattern: 'yyyy-MM-dd.log',
+      alwaysIncludePattern: true
     }
   },
-  'categories': {
-    'default': {
-      'appenders': [
-        'rule-console',
-        'rule-file',
-        'rule-error'
-      ],
-      'level': 'debug'
+  categories: {
+    default: {
+      appenders: ['rule-console', 'rule-file', 'rule-error'],
+      level: 'debug'
     },
-    'http': {
-      'appenders': [
-        'access'
-      ],
-      'level': 'info'
+    http: {
+      appenders: ['access'],
+      level: 'info'
     }
   }
-
 
   // 'appenders': [
   //   {

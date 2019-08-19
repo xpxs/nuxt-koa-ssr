@@ -1,8 +1,10 @@
 <template>
-  <Button 
+  <Button
     :disabled="btnDisabled || !sendMsgOnce"
     type="primary"
-    @click="fnSendMsg">{{ btnText }}</Button>
+    @click="fnSendMsg"
+  >{{ btnText }}</Button
+  >
 </template>
 <script>
 import { commonReq } from '@/api/commonReq'

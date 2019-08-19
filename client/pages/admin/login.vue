@@ -1,37 +1,40 @@
 <template>
   <section class="container">
     <div class="particles">
-      <vue-particles 
-        :particle-opacity="0.7" 
-        :particles-number="80" 
-        :particle-size="4" 
-        :lines-width="1" 
-        :line-linked="true" 
-        :line-opacity="0.4" 
-        :lines-distance="150" 
-        :move-speed="3" 
-        :hover-effect="true" 
-        :click-effect="true" 
-        color="#dedede" 
-        shape-type="circle" 
-        lines-color="#dedede" 
-        hover-mode="grab" 
-        click-mode="push" />
+      <vue-particles
+        :particle-opacity="0.7"
+        :particles-number="80"
+        :particle-size="4"
+        :lines-width="1"
+        :line-linked="true"
+        :line-opacity="0.4"
+        :lines-distance="150"
+        :move-speed="3"
+        :hover-effect="true"
+        :click-effect="true"
+        color="#dedede"
+        shape-type="circle"
+        lines-color="#dedede"
+        hover-mode="grab"
+        click-mode="push"
+      />
     </div>
     <Row>
-      <Col 
-        :xs="{ span: 18, offset: 3 }" 
-        :sm="{ span: 12, offset: 6 }" 
-        :md="{ span: 8, offset: 8 }" 
-        :lg="{ span: 6, offset: 9 }" 
-        class="login-form">
+      <Col
+        :xs="{ span: 18, offset: 3 }"
+        :sm="{ span: 12, offset: 6 }"
+        :md="{ span: 8, offset: 8 }"
+        :lg="{ span: 6, offset: 9 }"
+        class="login-form"
+      >
       <h1 class="tc mt20">{{ $t('login.login') }}</h1>
       <Button @click="fnChangeLang">{{ $t('langname') }}</Button>
-      <Form 
-        ref="loginForm" 
-        :model="loginForm" 
-        :rules="loginFormRule" 
-        :label-width="$t('lang') === 'en' ? 100 : 60">
+      <Form
+        ref="loginForm"
+        :model="loginForm"
+        :rules="loginFormRule"
+        :label-width="$t('lang') === 'en' ? 100 : 60"
+      >
         <FormItem 
           :label="$t('login.userPlaceholder')" 
           prop="userName">
@@ -41,7 +44,8 @@
             number>
           <Icon 
             slot="prepend" 
-            type="md-person" /></Input>
+            type="md-person"
+          /></Input>
         </FormItem>
         <FormItem 
           :label="$t('login.pwdPlaceholder')" 
@@ -51,34 +55,48 @@
             type="password">
           <Icon 
             slot="prepend" 
-            type="md-lock" /></Input>
+            type="md-lock"
+          /></Input>
         </FormItem>
         <FormItem 
           :label="$t('login.captchaPlaceholder')" 
           prop="captchaCode">
-          <Input 
-            v-model="loginForm.captchaCode" 
-            class="mr10" 
-            style="width: 120px;">
+          <Input
+            v-model="loginForm.captchaCode"
+            class="mr10"
+            style="width: 120px;"
+          >
           <Icon 
             slot="prepend" 
-            type="ios-create" /></Input>
+            type="ios-create"
+          /></Input>
           <span
             style="position: absolute; right: 0; top: 1px;"
             @click="fnGetCaptcha"
-            v-html="captchaData"/>
+            v-html="captchaData"
+          />
         </FormItem>
         <FormItem>
-          <Button 
+          <Button
             :loading="btnParams.loading"
-            :disabled="loginForm.userPwd === '' || loginForm.userName === '' || loginForm.captchaCode === ''"
-            type="primary" 
-            @click="fnSubmit('loginForm')">{{ btnParams.text }}</Button>
-          <Button 
-            type="default" 
-            style="margin-left: 8px; margin-right: 10px;" 
-            @click="fnReset('loginForm')">{{ $t('login.reset') }}</Button>
-          <Checkbox v-model="rememberPassword">{{ $t('login.remember') }}</Checkbox>
+            :disabled="
+              loginForm.userPwd === '' ||
+                loginForm.userName === '' ||
+                loginForm.captchaCode === ''
+            "
+            type="primary"
+            @click="fnSubmit('loginForm')"
+          >{{ btnParams.text }}</Button
+          >
+          <Button
+            type="default"
+            style="margin-left: 8px; margin-right: 10px;"
+            @click="fnReset('loginForm')"
+          >{{ $t('login.reset') }}</Button
+          >
+          <Checkbox v-model="rememberPassword">{{
+            $t('login.remember')
+          }}</Checkbox>
         </FormItem>
       </Form>
       </Col>

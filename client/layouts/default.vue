@@ -1,7 +1,7 @@
 <template>
   <Layout>
-    <nuxt/>
-    <my-footer/>
+    <nuxt />
+    <my-footer />
   </Layout>
 </template>
 

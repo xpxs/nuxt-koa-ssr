@@ -4,13 +4,15 @@
       :value="activeIndex"
       type="card"
       @on-click="fnOnClick"
-      @on-tab-remove="handleTabRemove">
-      <TabPane 
-        v-for="item in tabs" 
+      @on-tab-remove="handleTabRemove"
+    >
+      <TabPane
+        v-for="item in tabs"
         :label="item.name"
-        :closable="item.path !== '/admin'" 
-        :key="item.id" 
-        :name="item.path"/>
+        :closable="item.path !== '/admin'"
+        :key="item.id"
+        :name="item.path"
+      />
     </Tabs>
   </div>
 </template>
