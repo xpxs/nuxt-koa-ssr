@@ -55,7 +55,6 @@
     "uuid": "^3.3.2",
     "vue-cookies": "^1.5.12",
     "vue-loader": "^15.4.2",
-    "vue-lodash": "^2.0.0",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
