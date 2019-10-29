@@ -1,13 +1,14 @@
 <template>
   <div class="page-box">
-    <Page 
+    <Page
       :total="params.total"
       :size="params.size"
       :show-elevator="params.showElevator"
       :show-sizer="params.showSizer"
       :show-total="params.showTotal"
       @on-page-size-change="fnPageSizeChange"
-      @on-change="fnPageNumChange" />
+      @on-change="fnPageNumChange"
+    />
   </div>
 </template>
 <script>

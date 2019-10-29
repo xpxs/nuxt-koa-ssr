@@ -1,9 +1,10 @@
 <template>
-  <DatePicker 
+  <DatePicker
     :value="value"
     :type="parmas.type"
     placeholder="请选择时间"
-    @on-change="fnOnChange"/>
+    @on-change="fnOnChange"
+  />
 </template>
 <script>
 export default {

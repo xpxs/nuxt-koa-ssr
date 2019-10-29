@@ -1,8 +1,4 @@
 import Vue from 'vue'
-import VueLodash from 'vue-lodash'
+import Lodash from 'lodash'
 
-const options = {
-  name: '_'
-}
-
-Vue.use(VueLodash, options)
+Vue.prototype._ = Lodash

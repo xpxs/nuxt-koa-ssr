@@ -1,9 +1,10 @@
 <template>
   <Table
     :loading="params.loading"
-    :columns="params.columns" 
+    :columns="params.columns"
     :data="params.data"
-    border/>
+    border
+  />
 </template>
 <script>
 export default {

@@ -10,8 +10,13 @@
         <div class="left-nav">
           <nuxt-link 
             to="/" 
-            class="on"><Icon type="ios-globe" /> 网站管理</nuxt-link>
-          <nuxt-link to="/admin/login"><Icon type="ios-flower" /> 公众号管理</nuxt-link>
+            class="on"
+          ><Icon type="ios-globe" /> 网站管理</nuxt-link
+          >
+          <nuxt-link 
+            to="/admin/login"
+          ><Icon type="ios-flower" /> 公众号管理</nuxt-link
+          >
         </div>
         <div class="right-nav">
           <Button @click="fnChangeLang">{{ $t('langname') }}</Button>
@@ -22,42 +27,43 @@
             <Avatar 
               shape="circle" 
               icon="md-notifications" 
-              title="系统信息"/>
+              title="系统信息" />
           </Badge>
           <Badge dot>
             <Avatar 
-              shape="circle"
+              shape="circle" 
               icon="md-person" 
-              title="用户信息"/>
+              title="用户信息" />
           </Badge>
           <Badge>
             <Avatar 
               shape="circle" 
               icon="md-lock" 
-              title="锁住账户"/>
+              title="锁住账户" />
           </Badge>
           <Badge>
             <Avatar
-              shape="circle" 
-              icon="md-power" 
-              title="退出账户" 
-              @click.native="fnLogout" 
+              shape="circle"
+              icon="md-power"
+              title="退出账户"
+              @click.native="fnLogout"
             />
           </Badge>
         </div>
       </Content>
     </Layout>
     <Layout style="height: 100%;">
-      <Sider 
-        :class="{'extend-collapsed-sider':!collapsed}" 
+      <Sider
+        :class="{ 'extend-collapsed-sider': !collapsed }"
         hide-trigger
-        class="extend-sider">
-        <menus :collapsed="collapsed"/>
+        class="extend-sider"
+      >
+        <menus :collapsed="collapsed" />
       </Sider>
       <Content class="extend-content">
-        <nav-tab/>
+        <nav-tab />
         <div class="containter">
-          <nuxt/>
+          <nuxt />
         </div>
       </Content>
     </Layout>

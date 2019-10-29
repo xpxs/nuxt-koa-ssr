@@ -4,10 +4,11 @@
       :params="formParams" 
       @fnChangeForm="fnSearch" />
     <table-template :params="formatTableParams" />
-    <pagetion 
+    <pagetion
       :params="pageParams"
-      @fnPageSizeChange="fnPageSizeChange" 
-      @fnPageNumChange="fnPageNumChange"/>
+      @fnPageSizeChange="fnPageSizeChange"
+      @fnPageNumChange="fnPageNumChange"
+    />
   </div>
 </template>
 <script>

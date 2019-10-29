@@ -3,38 +3,42 @@
     <Menu
       v-show="collapsed"
       :active-name="activeIndex"
-      :class="{'left-nav-width-collapsed': !collapsed}"
+      :class="{ 'left-nav-width-collapsed': !collapsed }"
       theme="light"
       accordion
       class="left-nav-width"
-      @on-select="fnOnSelect">
+      @on-select="fnOnSelect"
+    >
       <template v-for="item in navData">
-        <Submenu 
+        <Submenu
           v-if="item.children.length > 0"
           :key="item.id"
-          :name="item.label + '!!' + item.route">
+          :name="item.label + '!!' + item.route"
+        >
           <template slot="title">
             <Icon :type="item.icon" />
             {{ item.label }}
           </template>
-          <MenuItem 
+          <MenuItem
             v-for="cItem in item.children"
             :key="cItem.id"
-            :name="cItem.label + '!!' + cItem.route" 
-            :to="cItem.route" 
-            replace>{{ cItem.label }}</MenuItem>
+            :name="cItem.label + '!!' + cItem.route"
+            :to="cItem.route"
+            replace
+          >{{ cItem.label }}</MenuItem
+          >
         </Submenu>
-        <MenuItem 
+        <MenuItem
           v-else
           :key="item.id"
           :name="item.label + '!!' + item.route"
-          :to="item.route">
+          :to="item.route"
+        >
         <Icon 
           :key="item.id" 
-          :type="item.icon" 
-        />
+          :type="item.icon" />
         {{ item.label }}
-          </MenuItem>
+        </MenuItem>
       </template>
     </Menu>
     <div 
@@ -45,27 +49,31 @@
           v-if="item.children.length === 0"
           :key="item.id"
           trigger="hover"
-          placement="right">
+          placement="right"
+        >
           <template slot="content">
-            <span
-              @click="fnOnSelect(item.label + '!!' + item.route)">{{ item.label }}</span>
+            <span @click="fnOnSelect(item.label + '!!' + item.route)">{{
+              item.label
+            }}</span>
           </template>
-          <Icon :type="item.icon"/>
+          <Icon :type="item.icon" />
         </Poptip>
-        <Dropdown 
+        <Dropdown
           v-else
           :key="item.id"
           placement="right"
-          @on-click="fnOnSelect">
+          @on-click="fnOnSelect"
+        >
           <a href="javascript:void(0)">
-            <Icon :type="item.icon"/>
+            <Icon :type="item.icon" />
           </a>
-          <DropdownMenu 
-            slot="list">
-            <DropdownItem 
+          <DropdownMenu slot="list">
+            <DropdownItem
               v-for="cItem in item.children"
-              :name="cItem.label + '!!' + cItem.route" 
-              :key="cItem.id">{{ cItem.label }}</DropdownItem>
+              :name="cItem.label + '!!' + cItem.route"
+              :key="cItem.id"
+            >{{ cItem.label }}</DropdownItem
+            >
           </DropdownMenu>
         </Dropdown>
       </template>

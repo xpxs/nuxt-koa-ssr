@@ -2,10 +2,10 @@
   <section class="container">
     <Row>
       <Col span="12">
-      <btn-count-down :parmas="parmas"/>
+      <btn-count-down :parmas="parmas" />
       <date-picker 
         :parmas="dateParmas" 
-        @fnChange="fnDateValue"/>
+        @fnChange="fnDateValue" />
       </Col>
       <Col span="12">col-12</Col>
     </Row>

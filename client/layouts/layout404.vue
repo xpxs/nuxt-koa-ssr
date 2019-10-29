@@ -1,5 +1,5 @@
 <template>
   <Layout class="h-per100">
-    <nuxt/>
+    <nuxt />
   </Layout>
 </template>
