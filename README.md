@@ -13,7 +13,7 @@ $ npm install # Or yarn install*[see note below]
 $ npm run dev
 
 # build for production and launch server X = alpha(测试环境), X = uat(联调环境), X = prod(生产环境)
-$ npm run X:build
+$ npm run X:build  
 $ npm run X:start
 
 #pm2运行nodejs程序
