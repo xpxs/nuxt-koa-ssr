@@ -3,7 +3,7 @@ nuxt-koa-ssr team
 
 > nuxt后端渲染  
 
-## Build Setup
+## Build Setup  
 
 ``` bash
 # install dependencies
