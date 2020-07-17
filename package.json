@@ -40,7 +40,7 @@
     "koa-jwt": "^3.5.1",
     "koa-log4": "^2.3.0",
     "koa-router": "^7.4.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "mockjs": "^1.0.1-beta3",
     "moment": "^2.22.2",
     "node-sass": "^4.10.0",
