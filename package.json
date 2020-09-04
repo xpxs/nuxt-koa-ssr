@@ -43,7 +43,7 @@
     "lodash": "^4.17.15",
     "mockjs": "^1.0.1-beta3",
     "moment": "^2.22.2",
-    "node-sass": "^4.10.0",
+    "node-sass": "^4.13.1",
     "nuxt": "^2.3.2",
     "nuxt-generate-cluster": "^2.6.0",
     "path": "^0.12.7",
