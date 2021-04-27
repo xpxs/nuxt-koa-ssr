@@ -47,7 +47,7 @@
     "nuxt": "^2.3.2",
     "nuxt-generate-cluster": "^2.6.0",
     "path": "^0.12.7",
-    "redis": "^2.8.0",
+    "redis": "^3.1.1",
     "sass-loader": "^7.1.0",
     "sequelize": "^4.40.0",
     "source-map-support": "^0.4.15",
