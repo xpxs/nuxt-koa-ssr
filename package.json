@@ -78,7 +78,7 @@
     "eslint-plugin-promise": "^4.0.0",
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-vue": "^4.7.1",
-    "jsonwebtoken": "^8.4.0",
+    "jsonwebtoken": "^9.0.0",
     "koa-multer": "^1.0.2",
     "mysql2": "^1.6.1",
     "negotiator": "^0.6.2",
